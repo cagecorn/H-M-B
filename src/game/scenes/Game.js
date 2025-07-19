@@ -1,5 +1,7 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
 import { DomSync } from '../utils/DomSync.js';
+// 전투 로그 매니저를 가져옵니다.
+import { combatLogManager } from '../debug/CombatLogManager.js';
 
 export class Game extends Scene
 {
@@ -63,6 +65,17 @@ export class Game extends Scene
             fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
             stroke: '#000000', strokeThickness: 4,
         }).setOrigin(0.5).setScrollFactor(0); // ScrollFactor(0)으로 설정하면 카메라가 움직여도 제자리에 고정됩니다.
+
+        // --- 디버그 로그 테스트 ---
+        const warriorStats = { name: '용맹한 전사', atk: 25, def: 10 };
+        const zombieStats = { name: '비틀거리는 좀비', atk: 15, def: 5 };
+
+        combatLogManager.logAttackCalculation(warriorStats, zombieStats, 25, 20);
+        combatLogManager.logAttackCalculation(zombieStats, warriorStats, 15, 5);
+
+        this.input.once('pointerdown', () => {
+            this.scene.start('GameOver');
+        });
     }
 
     update()
