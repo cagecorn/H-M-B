@@ -9,39 +9,53 @@ export class Preloader extends Scene
 
     init ()
     {
-        //  We loaded this image in our Boot Scene, so we can display it here
+        // 로딩 화면의 배경 이미지를 표시합니다.
+        // 이 이미지는 Boot.js에서 미리 로드되었습니다.
         this.add.image(512, 384, 'background');
 
-        //  A simple progress bar. This is the outline of the bar.
+        // 화면 중앙에 로고를 추가합니다.
+        // 이 로고는 아래 preload 함수에서 로드될 것입니다.
+        this.add.image(512, 300, 'logo');
+
+        // --- 로딩 진행률 표시줄 ---
+
+        // 1. 진행률 막대의 배경 (테두리)
         this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
 
-        //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-        const bar = this.add.rectangle(512-230, 384, 4, 28, 0xffffff);
+        // 2. "로딩 중..." 텍스트
+        this.add.text(512, 430, '로딩 중...', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 5,
+        }).setOrigin(0.5);
 
-        //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
+        // 3. 실제 채워지는 진행률 막대
+        const bar = this.add.rectangle(512 - 230, 384, 4, 28, 0xffffff);
+
+        // 로더의 'progress' 이벤트를 사용하여 진행률 막대의 너비를 업데이트합니다.
         this.load.on('progress', (progress) => {
-
-            //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
+            // progress 값(0에서 1 사이)에 따라 막대의 너비를 조절합니다.
             bar.width = 4 + (460 * progress);
-
         });
     }
 
     preload ()
     {
-        //  Load the assets for the game - Replace with your own assets
+        // 게임에 필요한 모든 애셋을 여기서 로드합니다.
         this.load.setPath('assets');
 
+        // 로고 이미지를 로드합니다.
         this.load.image('logo', 'logo.png');
+
+        // 게임 씬에서 사용할 전사 이미지를 로드합니다.
         this.load.image('warrior', 'images/unit/warrior.png');
     }
 
     create ()
     {
-        //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-        //  For example, you can define global animations here, so we can use them in other scenes.
-
-        //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
+        // 모든 애셋이 로드되면 메인 메뉴 씬으로 전환합니다.
         this.scene.start('MainMenu');
     }
 }
