@@ -13,6 +13,8 @@ const config = {
     height: 768,
     parent: 'game-container',
     backgroundColor: '#028af8',
+    // 기기의 픽셀 비율에 따라 해상도를 자동으로 조정합니다.
+    resolution: window.devicePixelRatio || 1,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
