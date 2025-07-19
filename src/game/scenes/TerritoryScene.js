@@ -2,6 +2,8 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
 import { DOMEngine } from '../utils/DOMEngine.js';
 import { TerritoryDOMEngine } from '../dom/TerritoryDOMEngine.js';
+// 새로 만든 해상도 로그 매니저를 import 합니다.
+import { debugResolutionLogManager } from '../debug/DebugResolutionLogManager.js';
 
 export class TerritoryScene extends Scene {
     constructor() {
@@ -15,6 +17,10 @@ export class TerritoryScene extends Scene {
         // DOM 엔진들을 초기화합니다.
         const domEngine = new DOMEngine(this);
         const territoryDomEngine = new TerritoryDOMEngine(this, domEngine);
+
+        // --- 중요: 해상도 정보 로그 출력 ---
+        // 게임이 시작될 때 현재 해상도 정보를 콘솔에 기록합니다.
+        debugResolutionLogManager.logResolution(this.sys.game);
 
         // 씬이 종료될 때 DOM 요소들을 정리하도록 이벤트를 설정합니다.
         this.events.on('shutdown', () => {
