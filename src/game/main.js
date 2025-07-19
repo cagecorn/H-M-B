@@ -3,6 +3,8 @@ import { Game as MainGame } from './scenes/Game.js';
 import { GameOver } from './scenes/GameOver.js';
 import { MainMenu } from './scenes/MainMenu.js';
 import { Preloader } from './scenes/Preloader.js';
+// 영지 화면을 위한 TerritoryScene을 가져옵니다.
+import { TerritoryScene } from './scenes/TerritoryScene.js';
 // phaser 모듈을 직접 불러오면 로컬 서버에서 해석되지 않으므로
 // node_modules 경로를 상대 경로로 지정합니다.
 // Phaser를 CDN에서 불러와 배포 시 404 오류를 방지합니다.
@@ -24,8 +26,10 @@ const config = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [
+        // Boot, Preloader 이후 영지 씬을 먼저 보여줍니다.
         Boot,
         Preloader,
+        TerritoryScene,
         MainMenu,
         MainGame,
         GameOver

@@ -51,11 +51,14 @@ export class Preloader extends Scene
 
         // 게임 씬에서 사용할 전사 이미지를 로드합니다.
         this.load.image('warrior', 'images/unit/warrior.png');
+
+        // 영지 씬에 사용할 배경 이미지를 로드합니다.
+        this.load.image('city-1', 'images/territory/city-1.png');
     }
 
     create ()
     {
-        // 모든 애셋이 로드되면 메인 메뉴 씬으로 전환합니다.
-        this.scene.start('MainMenu');
+        // 모든 애셋이 로드되면 영지 씬으로 전환합니다.
+        this.scene.start('TerritoryScene');
     }
 }
