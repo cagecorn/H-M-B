@@ -38,3 +38,50 @@ body {
     /* 사용자가 텍스트를 선택할 수 없도록 하여 더블클릭 시 불편함을 줄입니다. */
     user-select: none;
 }
+
+/* --- 영지 화면 DOM 스타일 --- */
+
+/* 영지 화면 전체를 감싸는 컨테이너 */
+#territory-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 영지 배경 이미지 */
+#territory-background {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 그리드 컨테이너 (CSS Grid 사용) */
+#territory-grid {
+    position: absolute;
+    display: grid;
+    gap: 10px;
+}
+
+/* 그리드 각 칸(건물 아이콘)의 스타일 */
+.building-icon {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* 아이콘 위에 마우스를 올렸을 때의 스타일 */
+.building-icon:hover {
+    transform: scale(1.1);
+}
