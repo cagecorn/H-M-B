@@ -21,7 +21,8 @@ const config = {
     width: surveyEngine.canvas.width,
     height: surveyEngine.canvas.height,
     parent: 'game-container',
-    backgroundColor: '#000000',
+    backgroundColor: 'transparent', // 배경색을 투명하게
+    transparent: true, // 캔버스 자체를 투명하게 설정
     // --- 수정 및 추가 ---
     pixelArt: true, // 픽셀 아트 모드를 활성화하여 뭉개짐을 방지합니다.
 
