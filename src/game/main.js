@@ -5,6 +5,8 @@ import { MainMenu } from './scenes/MainMenu.js';
 import { Preloader } from './scenes/Preloader.js';
 // 영지 화면을 위한 TerritoryScene을 가져옵니다.
 import { TerritoryScene } from './scenes/TerritoryScene.js';
+// 게임 해상도와 그리드 규격을 관리하는 SurveyEngine을 불러옵니다.
+import { surveyEngine } from './utils/SurveyEngine.js';
 // phaser 모듈을 직접 불러오면 로컬 서버에서 해석되지 않으므로
 // node_modules 경로를 상대 경로로 지정합니다.
 // Phaser를 CDN에서 불러와 배포 시 404 오류를 방지합니다.
@@ -15,10 +17,11 @@ import * as Phaser from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
     type: Phaser.AUTO,
-    width: 1024,
-    height: 768,
+    // SurveyEngine에서 캔버스 크기를 가져옵니다.
+    width: surveyEngine.canvas.width,
+    height: surveyEngine.canvas.height,
     parent: 'game-container',
-    backgroundColor: '#028af8',
+    backgroundColor: '#000000',
     // 기기의 픽셀 비율에 따라 해상도를 자동으로 조정합니다.
     resolution: window.devicePixelRatio || 1,
     scale: {
