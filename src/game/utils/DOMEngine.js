@@ -50,31 +50,30 @@ export class DOMEngine {
     showTooltip(x, y, text) {
         if (this.tooltip) this.hideTooltip();
 
-        // 툴팁을 위한 임시 게임 오브젝트를 생성하여 동기화
-        const tempTarget = new Phaser.GameObjects.Sprite(this.scene, x, y, null);
+        this.tooltip = document.createElement('div');
+        this.tooltip.innerText = text;
 
         const style = {
+            position: 'absolute',
+            left: `${x}px`,
+            top: `${y}px`,
             fontSize: '18px',
             color: '#ffffff',
             backgroundColor: 'rgba(0,0,0,0.7)',
             padding: '4px 8px',
             borderRadius: '4px',
-            transform: 'translate(-50%, -150%)'
+            transform: 'translate(10px, -100%)',
+            pointerEvents: 'none',
+            zIndex: '10000'
         };
+        Object.assign(this.tooltip.style, style);
 
-        this.tooltip = this.createSyncedText(tempTarget, text, style);
-        this.tooltip.syncTarget = tempTarget; // 임시 타겟 저장
+        this.uiContainer.appendChild(this.tooltip);
     }
 
     hideTooltip() {
         if (this.tooltip) {
-            const syncInstance = this.activeSyncs.find(s => s.domElement === this.tooltip);
-            if (syncInstance) {
-                syncInstance.destroy();
-                // activeSyncs 배열에서 제거
-                this.activeSyncs = this.activeSyncs.filter(s => s !== syncInstance);
-            }
-            this.tooltip.syncTarget.destroy();
+            this.tooltip.remove();
             this.tooltip = null;
         }
     }
