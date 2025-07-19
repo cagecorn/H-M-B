@@ -1,124 +1,153 @@
-muscle-and-blood
-🎯 게임 아이디어 로드맵 (v0.1) 💡 개요 장르: 턴제 자동 전투 RPG (영지 경영 + 가챠 기반 용병 수집 + 전략 배치)
+# Phaser Vite Template
 
-핵심 감성: 히어로즈 마이트 앤 매직 + 던전크롤 + 무게와 용맹의 전략성
+This is a Phaser 3 project template that uses Vite for bundling. It supports hot-reloading for quick development workflow and includes scripts to generate production-ready builds.
 
-🧩 1. 핵심 시스템 개요 ⚔️ 12 vs 12 자동 전투 시스템 진형 기반 전투 (15열 x 10열)
+**[This Template is also available as a TypeScript version.](https://github.com/phaserjs/template-vite-ts)**
 
-용병 클래스별 고유 AI 루틴 + 자동 스킬 발동
+### Versions
 
-전사 - 사거리 1, 이동력3 궁수 - 사거리 4, 이동력3 기병 - 사거리 1, 이동력5 창병 - 사거리 2, 이동력3 마법사 - 사거리3,이동력2 힐러 - 사거리3, 이동력2 소환술사 - 사거리2,이동력2
+This template has been updated for:
 
-진형 배치가 승부를 가름
+- [Phaser 3.90.0](https://github.com/phaserjs/phaser)
+- [Vite 6.3.1](https://github.com/vitejs/vite)
 
-🧿 용병 가챠 시스템 등급, 희귀도, 전용 스킬 보유
+![screenshot](screenshot.png)
 
-무기/방어구 장비 가능
+## Requirements
 
-일부 용병은 조합식으로도 획득 가능
+[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
 
-🛡 [용맹] 스탯 시스템 전투 시작 시 비례 보호막 생성
+## Available Commands
 
-보호막 수치에 따라 공격력/마법력 증가
+| Command | Description |
+|---------|-------------|
+| `npm install` | Install project dependencies |
+| `npm run dev` | Launch a development web server |
+| `npm run build` | Create a production build in the `dist` folder |
+| `npm run dev-nolog` | Launch a development web server without sending anonymous data (see "About log.js" below) |
+| `npm run build-nolog` | Create a production build in the `dist` folder without sending anonymous data (see "About log.js" below) |
 
-보호막이 깨질수록 딜량 저하
 
-기본 스탯과 용맹 사이의 전략적 투자
+## Writing Code
 
-⚖️ [무게] 시스템 장비마다 고유 무게 존재
+After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server by running `npm run dev`.
 
-무게 총합이 클수록 행동 순서가 느려짐
+The local development server runs on `http://localhost:8080` by default. Please see the Vite documentation if you wish to change this, or add SSL support.
 
-반대로 경량 장비 세팅은 빠른 선턴 확보 가능
+Once the server is running you can edit any of the files in the `src` folder. Vite will automatically recompile your code and then reload the browser.
 
-속도 vs 성능의 딜레마 제공
+## Template Project Structure
 
-🗺 던전 크롤 기반 월드맵 플레이어는 '영주' 역할
+We have provided a default project structure to get you started. This is as follows:
 
-맵은 타일형 랜덤 생성
+| Path                         | Description                                                |
+|------------------------------|------------------------------------------------------------|
+| `index.html`                 | A basic HTML page to contain the game.                     |
+| `public/assets`              | Game sprites, audio, etc. Served directly at runtime.      |
+| `public/style.css`           | Global layout styles.                                      |
+| `src/main.js`                | Application bootstrap.                                     |
+| `src/game`                   | Folder containing the game code.                           |
+| `src/game/main.js`           | Game entry point: configures and starts the game.          |
+| `src/game/scenes`            | Folder with all Phaser game scenes.                        | 
 
-각 타일마다 이벤트/전투/자원/용병 모집소 등 존재
+## Handling Assets
 
-적과 조우 시 → 자동 전투 전환
+Vite supports loading assets via JavaScript module `import` statements.
 
-🖌 2. 아트 방향 제안 스타일: 레트로 도트 아트 (이미 완성도 높은 도트 자산 보유!)
+This template provides support for both embedding assets and also loading them from a static folder. To embed an asset, you can import it at the top of the JavaScript file you are using it in:
 
-캐릭터: 머리 큰 SD 스타일 용병들 + 웅장한 월드맵 타일
+```js
+import logoImg from './assets/logo.png'
+```
 
-몬스터/보스/무기/아이템: 64x64 or 128x128 픽셀 규격(더 커질 수도 있음)
+To load static files such as audio files, videos, etc place them into the `public/assets` folder. Then you can use this path in the Loader calls within Phaser:
 
-UI: 고전적인 액자형 틀, 질감 있는 패널
+```js
+preload ()
+{
+    //  This is an example of an imported bundled image.
+    //  Remember to import it at the top of this file
+    this.load.image('logo', logoImg);
 
-⚙️ 3. 기술적 기초 설계 Canvas 기반 전환 필수 (성능 최적화 위해)
+    //  This is an example of loading a static image
+    //  from the public/assets folder:
+    this.load.image('background', 'assets/bg.png');
+}
+```
 
-구조:
+When you issue the `npm run build` command, all static assets are automatically copied to the `dist/assets` folder.
 
-PlayerState: 영주 및 용병 상태 관리
+## Deploying to Production
 
-WorldMapManager: 던전 타일 관리
+After you run the `npm run build` command, your code will be built into a single bundle and saved to the `dist` folder, along with any other assets your project imported, or stored in the public assets folder.
 
-CombatEngine: 자동 전투 로직 담당
+In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
 
-StatSystem: 스탯별 효과 계산기 (용맹, 무게 포함)
+## Customizing the Template
 
-DecorationManager: 유닛 장식 관리 (팀 깃발은 기본 비활성화, 필요시 setFlagsEnabled(true) 호출)
+### Vite
 
-📆 4. 개발 일정 예시 (가볍게) 단계 목표 예상 기간 v0.1 프로토타입 7vs7 전투 구현 + 스탯 영향 테스트 1~2주 v0.2 맵 연동 타일 이동 + 전투 진입 연계 1주 v0.3 용병 시스템 가챠 + 육성 + 장비 구현 2주 v0.4 UI 정리 본 UI 스케치 → 구현 1주 v0.5 플레이 테스트 밸런싱 및 튜토리얼 작성 2주
+If you want to customize your build, such as adding plugin (i.e. for loading CSS or fonts), you can modify the `vite/config.*.mjs` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json`. Please see the [Vite documentation](https://vitejs.dev/) for more information.
 
-🧨 5. 예상 리스크 & 대응 리스크 대응책 성능 병목 (특히 전투 시) 캔버스 + 배치 계산 최소화 자동 전투 밸런스 문제 로그 분석 + 시뮬레이션 자동화 중복된 용병 패턴 AI 루틴 분화, 특수 패시브 설정 무게/용맹 시스템 과도한 복잡성 시각화 + 툴팁 설명 철저히
+## About log.js
 
-게임의 빌드 예상도
+If you inspect our node scripts you will see there is a file called `log.js`. This file makes a single silent API call to a domain called `gryzor.co`. This domain is owned by Phaser Studio Inc. The domain name is a homage to one of our favorite retro games.
 
-용병마다 총 3개의 스킬이 달린다. 고용화면에서는 첫 번째 스킬만 확인가능하다. 2,3번째 스킬은 고용 후에 확인 가능(가챠 요소)
+We send the following 3 pieces of data to this API: The name of the template being used (vue, react, etc). If the build was 'dev' or 'prod' and finally the version of Phaser being used.
 
-용병이 스킬을 쓸 확률은 1,2,3순으로 낮아진다. 즉, 좋은 스킬이 첫번째, 두번째에 달리고, 패시브 스킬이 3번째에 달린 용병이 좋다. (예 : 첫번째 스킬 40% 두번째 스킬 30% 세번째 스킬 20%, 스킬을 안 쓸땐 평타) 용병에게 달리는 스킬은 용병의 클래스에 맞는 스킬들이 주로 붙는편(예외도 있음)
+At no point is any personal data collected or sent. We don't know about your project files, device, browser or anything else. Feel free to inspect the `log.js` file to confirm this.
 
-스킬의 종류는 두 가지, 액티브와 패시브. 액티브 - 스킬 순서에 따라 확률적을 사용. 패시브 - 상시 적용. 액티브가 앞에 올수록 좋음
+Why do we do this? Because being open source means we have no visible metrics about which of our templates are being used. We work hard to maintain a large and diverse set of templates for Phaser developers and this is our small anonymous way to determine if that work is actually paying off, or not. In short, it helps us ensure we're building the tools for you.
 
-좋은 용병 예 1번째 스킬 - 파이어 스트라이크 (개별) 2번째 스킬 - 파이어 월 (전체) 3번째 스킬 - 마인드 윌 (패시브, 지력 15%증가)
+However, if you don't want to send any data, you can use these commands instead:
 
-나쁜 용병 예 1번째 스킬 - 스톤 스킨(패시브, 방어력 15%증가) 2번째 스킬 - 파워 스트라이크 (개별) 3번째 스킬 - 퓨리 (액티브, 자기 공격력 버프)
+Dev:
 
-번외
+```bash
+npm run dev-nolog
+```
 
-스킬이 나쁘게 달려도 용병의 기본 스탯이 좋으면 쓸수 있는 유형 1번째 스킬 - 버서커 모드(패시브, 공격력 15%증가) 2번째 스킬 - 퓨리(액티브, 자기 공격력 버프) 3번째 스킬 - 리프 어택(개별)
+Build:
 
-= 패시브가 첫번째에 달렸음에도 퓨리와 중복이 되고, 낮은 확률로 후열의 적을 한명 순삭시킬 수 있기에 메리트가 있음.
+```bash
+npm run build-nolog
+```
 
-[용맹함]
+Or, to disable the log entirely, simply delete the file `log.js` and remove the call to it in the `scripts` section of `package.json`:
 
-전투 시작시 용병에게 주어지는 방어막 수치를 결정함. 또한, 방어막이 높을 수록 적에게 주는 피해 증가 - 방어막 깎일 수록 낮아짐. 왜? 용병육성의 다양한 빌드를 적용하기 위해서
+Before:
 
-용맹기사 - 배리어로 방어하면서 첫 턴 강한 공격을 하는 빌드, 몬스터보다 선턴을 잡지 못하면 의미 없음 <- 무게가중치를 낮추는 게 중요함 <- 아이템의 빌드화
+```json
+"scripts": {
+    "dev": "node log.js dev & dev-template-script",
+    "build": "node log.js build & build-template-script"
+},
+```
 
-용맹탱기사 - 배리어 + 체력 스탯
+After:
 
-순수탱기사 - 용맹 하나도 안 찍고 순수 체력, 방어력, 턴 순서 신경 안쓰고 무거운 갑옷 ALL
+```json
+"scripts": {
+    "dev": "dev-template-script",
+    "build": "build-template-script"
+},
+```
 
-순수법사 - 지력만 찍음. 유리대포
+Either of these will stop `log.js` from running. If you do decide to do this, please could you at least join our Discord and tell us which template you're using! Or send us a quick email. Either will be super-helpful, thank you.
 
-용맹법사 - 순수법사보다 안정적, 그러나 후반으로 갈수록 낮은 화력, 몬스터보다 선턴을 잡지 못하면(무게가중치가 낮지 않으면) 의미가 없음.
+## Join the Phaser Community!
 
-용맹딜법사 - 용맹과 지력을 골고루 찍은 밸런스 형, 탱킹력을 높이기 위해서 선턴을 포기하고 무거운 갑옷입힘. 4.메즈법사 - 지력을 포기하고 용맹 ALL + 무거운 갑옷으로 서브탱킹을 하면서 적에게 상태이상만 거는 용도.(이 경우 세번째 패시브로 스톤스킨이 붙으면 대박)
+We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
 
-예상되는 그림
+**Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser Twitter](https://twitter.com/phaser_)<br />
+**Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
+**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
+**Discord:** Join us on [Discord](https://discord.gg/phaser)<br />
+**Code:** 2000+ [Examples](https://labs.phaser.io)<br />
+**Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
 
-"용맹법사 좋다는 사람 누구임? 후반가면 종이짝에 딜도 안나오는데? 지력만 찍는 게 최고임." VS "난이도 높은 곳으로 갈수록 법사가 딜 한 두방 버티는 게 중요함, 용맹만 찍는 게 짱임 ㅇㅇ"
+Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
 
-아이템 시스템
+The Phaser logo and characters are &copy; 2011 - 2025 Phaser Studio Inc.
 
-아이템에 달린 스탯이 무거울수록 무게도 올라간다. - 무조건 스탯이 높은 템이 좋은 게 아님, 즉 초중반 아이템이 후반까지도 가는 특이성.(빌드 다양화) 힘, 용맹이 달린 아이템은 무조건 좋다. - 법사의 지팡이조차 힘이 달리면 무게가 0인 수준이라서 가치가 높음. 힘 + 용맹이 둘다 붙으면 최상위템(잘 안나옴) 공격력이 올라가는 헤비 아머도 가치가 있음 - 용맹 시스템에 의해서 방어템 = 탱킹력, 의 공식이 깨짐. 헤비 아머를 차고도 선턴을 잡을 수 있는 건 힘이 높은 기사가 유일하기 때문에 '딜이 올라가는 헤비아머 = 딜러용'의 공식도 깨짐. 법사가 입을 경우 딜은 상승하지만 선턴이 밀리므로 자연스러운 밸런스 조절. 조합시스템 -굳이 게임에 [조합에 따라 어떤 효과 발동], 이런 게 없어도 자연스레 각각의 목적에 맞는 조합이 완성됨
-
-뺑뺑이덱 - 12인 용맹 경&중갑 빠르게 선턴을 잡은 후 용맹 데미지로 초반에 죽이는 덱. 사냥이 빠르기 때문에 뺑뺑이로 적당. 초반에 끝나기 때문에 힐러도 필요없음. 단 후반 사냥터에 가면 무쓸모
-
-레이드덱 - 12인 중&경갑, 용맹 안 찍음. 보스의 체력이 높아서 용맹 데미지가 의미가 없음. 순수 힘기사, 지력법사, 지력힐러의 정통 조합. 선턴도 의미가 없어서 다들 무거운 갑옷 착용
-
-맵뚫기덱 - 12인 전략 파티 더 높은 던전을 뚫기 위한 덱. 탱킹메즈법사, 용맹힐러 같은 전략적인 조합을 요구함. 선턴도 잡으면서 장기전도 필요하기 때문에 최정예 부대.
-
-우리가 고용하는 [용병]은 병종을 리드하는 [지휘관]인 거지. -전투시 [병종]이 대신 나와서 싸움. 용병의 능력치, 기술등은 그대로 적용. -hp는 '병종 수'로 나타냄. 병종 하나마다 기본 체력이 있고, 그것의 합한 값이 전체 체력, 데미지만큼 병종이 죽어나감.(뭔말인지 알지?)
-
-왜?
-
--출력해야하는 이미지를 획기적으로 줄이기 위해. 만일 용병이 직접 나와서 싸운다고 가정하면 '용병 개개인마다 도트 애니메이션 스프라이트가 있어야함.(물론 그냥 '기본 전사 도트'를 세워놓고 이름만 다 다르게 해도 되긴 함. 하지만 맛이 안 삼) -용병이 지휘관이라고 가정하면, 배틀 필드에 세우는 병종은 7개 혹은 50개(전직시스템)으로 줄어들고 그 갯수의 애니메이션 스프라이트만 있으면 됨.(몬스터도 비슷한 원리) -용병 개개인마다 출력해야하는 이미지는 얼굴이 나오는 간단한 일러스트 한장이면 충분. 이러면 용병 개개인마다의 스프라이트를 설정할 필요도 없으며 개개인의 개성도 표출
-
-정리: 용병 스탯 화면, 장비 화면, 전투화면 옆에 출력되는 이미지는 - 지휘관의 일러스트 배틀 필드에 나오는 도트 애니메이션은 [전사 병종, 궁수 병종, 마법사 병종 등]이면 충분.
+All rights reserved.
