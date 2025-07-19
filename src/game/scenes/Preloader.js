@@ -54,6 +54,9 @@ export class Preloader extends Scene
 
         // 영지 씬에 사용할 배경 이미지를 로드합니다.
         this.load.image('city-1', 'images/territory/city-1.png');
+
+        // 여관 아이콘 이미지를 로드합니다.
+        this.load.image('tavern-icon', 'images/territory/tavern-icon.png');
     }
 
     create ()
