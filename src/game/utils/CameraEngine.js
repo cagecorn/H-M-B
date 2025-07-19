@@ -1,4 +1,4 @@
-import { debugLogEngine } from './DebugLogEngine.js';
+import { debugCameraLogManager } from '../debug/DebugCameraLogManager.js';
 
 /**
  * 게임 카메라의 복잡한 움직임과 연출을 담당하는 엔진 (싱글턴)
@@ -11,7 +11,7 @@ class CameraEngine {
         this.scene = null;
         this.camera = null;
 
-        debugLogEngine.log('CameraEngine', '카메라 엔진 초기화. 씬이 등록되기를 기다립니다...');
+        debugCameraLogManager.logAction('엔진 초기화', { message: '카메라 엔진 초기화. 씬이 등록되기를 기다립니다...' });
         CameraEngine.instance = this;
     }
     
@@ -23,7 +23,7 @@ class CameraEngine {
     registerScene(scene) {
         this.scene = scene;
         this.camera = scene.cameras.main;
-        debugLogEngine.log('CameraEngine', `[${scene.scene.key}] 씬의 카메라를 등록했습니다.`);
+        debugCameraLogManager.logAction('씬 등록', { scene: scene.scene.key });
     }
 
     /**
@@ -36,11 +36,11 @@ class CameraEngine {
     closeupOn(target, zoomLevel = 2, duration = 1000) {
         return new Promise(resolve => {
             if (!this.camera) {
-                debugLogEngine.error('CameraEngine', '카메라가 등록되지 않았습니다.');
+                console.error('CameraEngine', '카메라가 등록되지 않았습니다.');
                 return resolve();
             }
 
-            debugLogEngine.log('CameraEngine', `${target.name || '대상'}에 클로즈업합니다.`);
+            debugCameraLogManager.logAction('클로즈업', { target: target.name, zoom: zoomLevel, duration });
             
             // Pan(이동)과 Zoom(확대) 효과를 동시에 실행합니다.
             this.camera.pan(target.x, target.y, duration, 'Sine.easeInOut');
@@ -59,11 +59,11 @@ class CameraEngine {
     reset(duration = 1000) {
         return new Promise(resolve => {
             if (!this.camera) {
-                debugLogEngine.error('CameraEngine', '카메라가 등록되지 않았습니다.');
+                console.error('CameraEngine', '카메라가 등록되지 않았습니다.');
                 return resolve();
             }
-            
-            debugLogEngine.log('CameraEngine', '카메라를 원래 상태로 복원합니다.');
+
+            debugCameraLogManager.logAction('리셋', { duration });
             
             // 기본 줌 레벨(1)과 월드 중앙으로 되돌아갑니다.
             // Pan과 Zoom의 대상 좌표와 레벨은 게임에 맞게 수정할 수 있습니다.
@@ -83,9 +83,11 @@ class CameraEngine {
     shake(intensity = 0.01, duration = 200) {
         return new Promise(resolve => {
             if (!this.camera) {
-                debugLogEngine.error('CameraEngine', '카메라가 등록되지 않았습니다.');
+                console.error('CameraEngine', '카메라가 등록되지 않았습니다.');
                 return resolve();
             }
+
+            debugCameraLogManager.logAction('화면 흔들기', { duration, intensity });
 
             this.camera.shake(duration, intensity);
             
