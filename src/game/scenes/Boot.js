@@ -1,5 +1,6 @@
 // Vite 없이 실행할 수 있도록 phaser ESM을 직접 참조합니다.
-import { Scene } from '../../../node_modules/phaser/dist/phaser.esm.js';
+// Phaser 모듈을 CDN에서 가져옵니다.
+import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
 
 export class Boot extends Scene
 {

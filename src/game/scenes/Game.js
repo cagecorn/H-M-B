@@ -1,4 +1,4 @@
-import { Scene } from '../../../node_modules/phaser/dist/phaser.esm.js';
+import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
 import { DomSync } from '../utils/DomSync.js';
 
 export class Game extends Scene
