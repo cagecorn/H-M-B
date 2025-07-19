@@ -1,4 +1,5 @@
-import { Scene } from 'phaser';
+// Phaser 모듈을 CDN에서 가져와 브라우저에서 직접 실행될 때 모듈 해석 오류를 방지합니다.
+import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
 import { DOMEngine } from '../utils/DOMEngine.js';
 import { TerritoryDOMEngine } from '../dom/TerritoryDOMEngine.js';
 
