@@ -17,7 +17,9 @@ const phasermsg = () => {
 }   
 
 export default defineConfig({
-    base: './',
+    // Set the base path so assets resolve correctly when served from the
+    // repository root on GitHub Pages or similar static hosts.
+    base: '/H-M-B/',
     logLevel: 'warn',
     build: {
         rollupOptions: {
