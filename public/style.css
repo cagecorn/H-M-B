@@ -75,9 +75,10 @@ body {
     cursor: pointer;
     transition: transform 0.1s ease-in-out;
 
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-crisp-edges;
-    image-rendering: pixelated;
+    /* --- 중요: 이미지 뭉개짐 방지 (픽셀 선명하게) --- */
+    image-rendering: -moz-crisp-edges;      /* Firefox */
+    image-rendering: -webkit-crisp-edges;   /* Webkit (Chrome, Safari) */
+    image-rendering: pixelated;             /* W3C 표준 */
     image-rendering: crisp-edges;
 }
 
