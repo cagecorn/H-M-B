@@ -78,7 +78,7 @@ body {
     /* --- 중요: 이미지 뭉개짐 방지 (픽셀 선명하게) --- */
     image-rendering: -moz-crisp-edges;      /* Firefox */
     image-rendering: -webkit-crisp-edges;   /* Webkit (Chrome, Safari) */
-    image-rendering: pixelated;             /* W3C 표준 */
+    image-rendering: pixelated !important;             /* W3C 표준 */
     image-rendering: crisp-edges;
 }
 
