@@ -1,4 +1,4 @@
-import { Scene } from 'phaser';
+import { Scene } from '../../../node_modules/phaser/dist/phaser.esm.js';
 import { DomSync } from '../utils/DomSync.js';
 
 export class Game extends Scene
