@@ -127,7 +127,7 @@ export class PartyDOMEngine {
     addBackButton() {
         const backButton = document.createElement('div');
         backButton.id = 'party-back-button';
-        backButton.innerText = '← 영지로 돌아가기';
+        backButton.innerText = '←';
         backButton.addEventListener('click', () => {
             this.hide();
             this.scene.scene.start('TerritoryScene');

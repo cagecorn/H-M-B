@@ -1,5 +1,6 @@
 import { partyEngine } from '../utils/PartyEngine.js';
 import { mercenaryEngine } from '../utils/MercenaryEngine.js';
+import { formationEngine } from '../utils/FormationEngine.js';
 
 export class FormationDOMEngine {
     constructor(scene, domEngine) {
@@ -49,7 +50,7 @@ export class FormationDOMEngine {
 
         const backButton = document.createElement('div');
         backButton.id = 'formation-back-button';
-        backButton.innerText = '← 영지로 돌아가기';
+        backButton.innerText = '←';
         backButton.addEventListener('click', () => {
             this.hide();
             this.scene.scene.start('TerritoryScene');
@@ -65,17 +66,34 @@ export class FormationDOMEngine {
         partyMembers.forEach(id => {
             const unit = allMercs.find(m => m.uniqueId === id);
             if (!unit) return;
-            const cell = cells[cellIndex++];
+
+            let cell = null;
+            const savedIndex = formationEngine.getPosition(id);
+            if (savedIndex !== undefined) {
+                cell = this.grid.querySelector(`[data-index='${savedIndex}']`);
+            }
+            if (!cell || !cell.classList.contains('ally-area')) {
+                cell = cells[cellIndex++];
+            }
             if (!cell) return;
+
             const unitDiv = document.createElement('div');
             unitDiv.className = 'formation-unit';
+            unitDiv.dataset.unitId = id;
             unitDiv.style.backgroundImage = `url(${unit.battleSprite})`;
             unitDiv.draggable = true;
             unitDiv.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('unit-id', id);
-                e.dataTransfer.setData('from-cell', cell.dataset.index);
+                e.dataTransfer.setData('from-cell', unitDiv.parentElement.dataset.index);
             });
+
+            const nameLabel = document.createElement('div');
+            nameLabel.className = 'formation-unit-name';
+            nameLabel.innerText = unit.instanceName || unit.name;
+            unitDiv.appendChild(nameLabel);
+
             cell.appendChild(unitDiv);
+            formationEngine.setPosition(id, parseInt(cell.dataset.index));
         });
     }
 
@@ -90,11 +108,14 @@ export class FormationDOMEngine {
         const draggedUnit = fromCell.firstElementChild;
         const targetUnit = targetCell.firstElementChild;
         if (!draggedUnit) return;
+
+        targetCell.appendChild(draggedUnit);
+        formationEngine.setPosition(parseInt(unitId), parseInt(targetCell.dataset.index));
+
         if (targetUnit) {
-            targetCell.appendChild(draggedUnit);
             fromCell.appendChild(targetUnit);
-        } else {
-            targetCell.appendChild(draggedUnit);
+            const otherId = parseInt(targetUnit.dataset.unitId);
+            if (otherId) formationEngine.setPosition(otherId, parseInt(fromCell.dataset.index));
         }
     }
 
