@@ -39,5 +39,16 @@ export class CursedForestBattleScene extends Scene {
             );
         }
         formationEngine.placeMonsters(this, monsters, 8);
+
+        this.events.on('shutdown', () => {
+            ['dungeon-container', 'territory-container'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'block';
+            });
+
+            if (this.stageManager) {
+                this.stageManager.destroy();
+            }
+        });
     }
 }
