@@ -660,4 +660,23 @@ body {
     background-repeat: no-repeat;
     background-position: center bottom;
     will-change: transform;
+    position: relative;
+}
+
+.battle-unit-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: 12px;
+    text-align: center;
+    color: #fff;
+}
+
+.battle-unit-name.ally {
+    background-color: rgba(0, 0, 255, 0.6);
+}
+
+.battle-unit-name.enemy {
+    background-color: rgba(255, 0, 0, 0.6);
 }
