@@ -15,10 +15,13 @@ export class TerritoryScene extends Scene {
         const territoryContainer = document.getElementById('territory-container');
         if (territoryContainer) {
             territoryContainer.style.display = 'block';
+            // 장면 전환 시 기존 DOM이 남아있어 아이콘이 중복되는 문제를 방지하기 위해
+            // 컨테이너를 초기화합니다.
+            territoryContainer.innerHTML = '';
         }
         // 중요: 이제 이 씬은 비어있습니다.
         // 모든 시각적 요소는 DOM 엔진들이 담당합니다.
-        
+
         // DOM 엔진들을 초기화합니다.
         const domEngine = new DOMEngine(this);
         const territoryDomEngine = new TerritoryDOMEngine(this, domEngine);
@@ -29,8 +32,8 @@ export class TerritoryScene extends Scene {
 
         // 씬이 종료될 때 DOM 요소들을 정리하도록 이벤트를 설정합니다.
         this.events.on('shutdown', () => {
-            // PartyScene 전환 시 DOM을 유지하기 위해 파괴하지 않습니다.
-            // territoryDomEngine.destroy();
+            // DOM을 정리하여 다음에 씬을 다시 생성할 때 중복이 발생하지 않도록 합니다.
+            territoryDomEngine.destroy();
         });
     }
 }
