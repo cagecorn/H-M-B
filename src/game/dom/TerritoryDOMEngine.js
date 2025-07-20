@@ -1,7 +1,8 @@
 import { surveyEngine } from '../utils/SurveyEngine.js';
 import { DOMEngine } from '../utils/DOMEngine.js';
-// StatEngine을 불러옵니다.
+// StatEngine과 함께 MercenaryEngine을 불러옵니다.
 import { statEngine } from '../utils/StatEngine.js';
+import { mercenaryEngine } from '../utils/MercenaryEngine.js';
 
 /**
  * 영지 화면의 DOM 요소를 생성하고 관리하는 전용 엔진
@@ -161,10 +162,15 @@ export class TerritoryDOMEngine {
 
         this.updateMercenaryImage();
 
-        // --- 수정: 이미지 클릭 시 상세 정보창을 띄우도록 변경 ---
+        // 이미지를 클릭하면 MercenaryEngine을 통해 고용을 진행합니다.
         mercenaryImage.onclick = () => {
-            const currentMercenaryData = this.mercenaryList[this.currentMercenaryIndex];
-            this.showUnitDetails(currentMercenaryData);
+            const baseMercenaryData = this.mercenaryList[this.currentMercenaryIndex];
+            // 1. MercenaryEngine에 고용을 요청합니다.
+            const newInstance = mercenaryEngine.hireMercenary(baseMercenaryData);
+
+            // 2. 고용 창을 닫고, 반환된 새 인스턴스로 상세 정보창을 엽니다.
+            this.hideHireModal();
+            this.showUnitDetails(newInstance);
         };
     }
 
@@ -198,7 +204,7 @@ export class TerritoryDOMEngine {
 
     /**
      * 유닛 상세 정보 UI를 생성하고 표시합니다.
-     * @param {object} unitData - 표시할 유닛의 데이터 (this.mercenaries 객체 중 하나)
+     * @param {object} unitData - 표시할 유닛의 데이터 (고유 인스턴스)
      */
     showUnitDetails(unitData) {
         if (this.unitDetailView) this.unitDetailView.remove();
