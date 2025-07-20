@@ -11,8 +11,7 @@ import { surveyEngine } from './utils/SurveyEngine.js';
 // node_modules 경로를 상대 경로로 지정합니다.
 // Phaser를 CDN에서 불러와 배포 시 404 오류를 방지합니다.
 // ESM 빌드에는 기본 내보내기가 없으므로 전체 네임스페이스를 가져옵니다.
-import * as Phaser from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
-
+import * as Phaser from "https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js";
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
@@ -21,13 +20,16 @@ const config = {
     width: surveyEngine.canvas.width,
     height: surveyEngine.canvas.height,
     parent: 'game-container',
-    backgroundColor: 'transparent', // 배경색을 투명하게
-    transparent: true, // 캔버스 자체를 투명하게 설정
-    pixelArt: false, // 스프라이트가 선명하게 보이도록 픽셀 아트 모드를 활성화
-    resolution: window.devicePixelRatio || 1,
+    transparent: true, // 캔버스 자체를 투명하게 설정합니다.
+    backgroundColor: 'transparent', // 배경색을 투명하게 만듭니다.
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    render: {
+        pixelArt: false,
+        antialias: true, // 안티에일리어싱을 활성화하여 이미지를 부드럽게 표현합니다.
+        resolution: window.devicePixelRatio || 1, // 기기의 픽셀 비율에 맞춰 해상도를 설정합니다.
     },
     // Boot 씬만 초기 설정에 등록합니다.
     // Boot 씬이 실행되면서 나머지 씬들을 동적으로 추가합니다.
