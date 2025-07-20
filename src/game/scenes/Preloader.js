@@ -1,4 +1,5 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
+import { imageSizeManager } from '../utils/ImageSizeManager.js';
 
 export class Preloader extends Scene
 {
@@ -13,15 +14,15 @@ export class Preloader extends Scene
         // 이 이미지는 Boot.js에서 미리 로드되었습니다.
         this.add.image(512, 384, 'background');
 
-        // 화면 중앙에 로고를 추가합니다.
-        // 이 로고는 아래 preload 함수에서 로드될 것입니다.
-        const logo = this.add.image(512, 300, 'logo');
-        const logoTexture = this.textures.get('logo');
-        // 로고의 원본 너비를 이용해 스케일을 조절하여 항상 400px 폭으로 보이게 합니다.
-        if (logoTexture && logoTexture.source[0].width > 0) {
-            const scale = 400 / logoTexture.source[0].width;
-            logo.setScale(scale);
-        }
+        // 모든 리소스 로드 완료 후 로고를 중앙에 표시하고 스케일을 조정합니다.
+        this.load.on('complete', () => {
+            const logo = this.add.image(512, 300, 'logo');
+            const logoTexture = this.textures.get('logo');
+            if (logoTexture.key !== '__MISSING') {
+                const scale = imageSizeManager.getScale('LOGO', logoTexture, 'width');
+                logo.setScale(scale);
+            }
+        });
 
         // --- 로딩 진행률 표시줄 ---
 

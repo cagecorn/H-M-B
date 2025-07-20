@@ -1,5 +1,6 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
 import { mercenaryEngine } from '../utils/MercenaryEngine.js';
+import { imageSizeManager } from '../utils/ImageSizeManager.js';
 
 export class PartyScene extends Scene {
     constructor() {
@@ -66,9 +67,8 @@ export class PartyScene extends Scene {
                     if (this.textures.exists(spriteKey)) {
                         const sprite = this.add.image(x, y, spriteKey).setOrigin(0.5).setInteractive();
 
-                        // 타일 크기에 맞도록 동적으로 스케일을 계산합니다.
-                        const texture = this.textures.get(spriteKey);
-                        const scale = cellWidth / texture.source[0].width;
+                        // 타일 크기에 맞도록 ImageSizeManager를 사용해 스케일을 계산합니다.
+                        const scale = imageSizeManager.getScale('ICON_IN_PARTY', sprite.texture, 'width');
                         sprite.setScale(scale);
 
                         sprite.unitId = unitId;
