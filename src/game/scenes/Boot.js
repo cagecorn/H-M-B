@@ -1,6 +1,13 @@
 // Vite 없이 실행할 수 있도록 phaser ESM을 직접 참조합니다.
 // Phaser 모듈을 CDN에서 가져옵니다.
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
+import { Preloader } from './Preloader.js';
+import { TerritoryScene } from './TerritoryScene.js';
+import { MainMenu } from './MainMenu.js';
+import { MainGame } from './Game.js';
+import { GameOver } from './GameOver.js';
+// --- PartyScene import 추가 ---
+import { PartyScene } from './PartyScene.js';
 
 export class Boot extends Scene
 {
@@ -19,6 +26,14 @@ export class Boot extends Scene
 
     create ()
     {
+        this.scene.add('Preloader', Preloader);
+        this.scene.add('TerritoryScene', TerritoryScene);
+        this.scene.add('MainMenu', MainMenu);
+        this.scene.add('MainGame', MainGame);
+        this.scene.add('GameOver', GameOver);
+        // --- PartyScene 추가 ---
+        this.scene.add('PartyScene', PartyScene);
+
         this.scene.start('Preloader');
     }
 }
