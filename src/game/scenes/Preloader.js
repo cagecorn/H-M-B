@@ -57,6 +57,12 @@ export class Preloader extends Scene
 
         // 여관 아이콘 이미지를 로드합니다.
         this.load.image('tavern-icon', 'images/territory/tavern-icon.png');
+
+        // --- 추가된 애셋들 ---
+        this.load.image('tavern-scene', 'images/territory/tavern-scene.png');
+        this.load.image('hire-icon', 'images/territory/hire-icon.png');
+        this.load.image('warrior-hire', 'images/territory/warrior-hire.png');
+        this.load.image('gunner-hire', 'images/territory/gunner-hire.png');
     }
 
     create ()
