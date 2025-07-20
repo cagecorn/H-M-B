@@ -31,7 +31,7 @@ export class DungeonDOMEngine {
         tile.className = 'dungeon-tile';
         tile.style.backgroundImage = 'url(assets/images/territory/cursed-forest.png)';
         tile.addEventListener('click', () => {
-            console.log('저주받은 숲 선택');
+            this.scene.scene.start('CursedForestBattle');
         });
 
         const label = document.createElement('div');
