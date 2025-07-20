@@ -26,4 +26,14 @@ export class BattleStageManager {
         }
         formationEngine.registerGrid(this.gridEngine);
     }
+
+    /**
+     * 생성한 그리드를 정리합니다.
+     */
+    destroy() {
+        if (this.gridEngine && this.gridEngine.graphics) {
+            this.gridEngine.graphics.destroy();
+            this.gridEngine.graphics = null;
+        }
+    }
 }
