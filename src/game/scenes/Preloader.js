@@ -63,6 +63,8 @@ export class Preloader extends Scene
         this.load.image('hire-icon', 'images/territory/hire-icon.png');
         this.load.image('warrior-hire', 'images/territory/warrior-hire.png');
         this.load.image('gunner-hire', 'images/territory/gunner-hire.png');
+        this.load.image('warrior-ui', 'images/territory/warrior-ui.png');
+        this.load.image('gunner-ui', 'images/territory/gunner-ui.png');
     }
 
     create ()
