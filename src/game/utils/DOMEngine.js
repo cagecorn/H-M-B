@@ -48,33 +48,33 @@ export class DOMEngine {
      * @param {string} text - 표시할 텍스트
      */
     showTooltip(x, y, text) {
-        if (this.tooltip) this.hideTooltip();
+        if (!this.tooltip) {
+            this.tooltip = document.createElement('div');
+            const style = {
+                position: 'absolute',
+                fontSize: '18px',
+                color: '#ffffff',
+                backgroundColor: 'rgba(0,0,0,0.7)',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                transform: 'translate(10px, -100%)',
+                pointerEvents: 'none',
+                zIndex: '10000',
+                willChange: 'transform'
+            };
+            Object.assign(this.tooltip.style, style);
+            this.uiContainer.appendChild(this.tooltip);
+        }
 
-        this.tooltip = document.createElement('div');
         this.tooltip.innerText = text;
-
-        const style = {
-            position: 'absolute',
-            left: `${x}px`,
-            top: `${y}px`,
-            fontSize: '18px',
-            color: '#ffffff',
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            transform: 'translate(10px, -100%)',
-            pointerEvents: 'none',
-            zIndex: '10000'
-        };
-        Object.assign(this.tooltip.style, style);
-
-        this.uiContainer.appendChild(this.tooltip);
+        this.tooltip.style.left = `${x}px`;
+        this.tooltip.style.top = `${y}px`;
+        this.tooltip.style.display = 'block';
     }
 
     hideTooltip() {
         if (this.tooltip) {
-            this.tooltip.remove();
-            this.tooltip = null;
+            this.tooltip.style.display = 'none';
         }
     }
 

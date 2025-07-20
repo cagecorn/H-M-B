@@ -40,11 +40,21 @@ export class FormationDOMEngine {
                 cell.dataset.index = index++;
                 cell.dataset.col = c;
                 cell.dataset.row = r;
-                cell.addEventListener('dragover', (e) => e.preventDefault());
-                cell.addEventListener('drop', (e) => this.handleDrop(e, cell));
                 grid.appendChild(cell);
             }
         }
+
+        this.grid.addEventListener('dragover', (e) => {
+            const cell = e.target.closest('.formation-cell');
+            if (cell && cell.classList.contains('ally-area')) {
+                e.preventDefault();
+            }
+        });
+
+        this.grid.addEventListener('drop', (e) => {
+            const cell = e.target.closest('.formation-cell');
+            if (cell) this.handleDrop(e, cell);
+        });
 
         this.placeUnits();
 
