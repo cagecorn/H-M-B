@@ -28,15 +28,9 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [
-        // Boot, Preloader 이후 영지 씬을 먼저 보여줍니다.
-        Boot,
-        Preloader,
-        TerritoryScene,
-        MainMenu,
-        MainGame,
-        GameOver
-    ]
+    // Boot 씬만 초기 설정에 등록합니다.
+    // Boot 씬이 실행되면서 나머지 씬들을 동적으로 추가합니다.
+    scene: [Boot]
 };
 
 const StartGame = (parent) => {
