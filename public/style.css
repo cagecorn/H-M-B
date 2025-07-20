@@ -272,10 +272,8 @@ body {
 
 /* Phaser 게임 캔버스를 담는 컨테이너 */
 #game-container {
-    width: 1920px;
-    height: 1080px;
     position: absolute;
-    z-index: 1;
+    z-index: 1; 
 }
 
 /* --- 유닛 상세 정보창 스타일 --- */
