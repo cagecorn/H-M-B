@@ -15,7 +15,13 @@ export class Preloader extends Scene
 
         // 화면 중앙에 로고를 추가합니다.
         // 이 로고는 아래 preload 함수에서 로드될 것입니다.
-        this.add.image(512, 300, 'logo');
+        const logo = this.add.image(512, 300, 'logo');
+        const logoTexture = this.textures.get('logo');
+        // 로고의 원본 너비를 이용해 스케일을 조절하여 항상 400px 폭으로 보이게 합니다.
+        if (logoTexture && logoTexture.source[0].width > 0) {
+            const scale = 400 / logoTexture.source[0].width;
+            logo.setScale(scale);
+        }
 
         // --- 로딩 진행률 표시줄 ---
 
