@@ -72,6 +72,9 @@ export class Preloader extends Scene
         this.load.image('gunner-hire', 'images/territory/gunner-hire.png');
         this.load.image('warrior-ui', 'images/territory/warrior-ui.png');
         this.load.image('gunner-ui', 'images/territory/gunner-ui.png');
+        this.load.image('dungeon-icon', 'images/territory/dungeon-icon.png');
+        this.load.image('dungeon-scene', 'images/territory/dungeon-scene.png');
+        this.load.image('cursed-forest', 'images/territory/cursed-forest.png');
     }
 
     create ()
