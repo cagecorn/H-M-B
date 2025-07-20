@@ -644,12 +644,15 @@ body {
     display: grid;
     grid-template-columns: repeat(16, 1fr);
     grid-template-rows: repeat(9, 1fr);
+    gap: 0; /* ensure no visible grid lines */
     pointer-events: auto;
 }
 
 .battle-cell {
     /* removed visible grid lines for cleaner battle view */
     border: none;
+    outline: none;
+    box-sizing: border-box;
     position: relative;
 }
 
@@ -665,12 +668,20 @@ body {
 
 .battle-unit-name {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 100%;
+    padding: 2px 4px;
     font-size: 12px;
+    font-weight: bold;
+    line-height: 1.2;
     text-align: center;
     color: #fff;
+    text-shadow: 0 0 2px #000;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .battle-unit-name.ally {
