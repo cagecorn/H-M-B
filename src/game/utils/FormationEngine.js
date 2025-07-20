@@ -31,8 +31,10 @@ class FormationEngine {
             const index = this.getPosition(unit.uniqueId);
             const cell = this.grid.gridCells[index];
             if (!cell) return;
-            const sprite = scene.add.image(cell.x, cell.y, unit.battleSprite || unit.spriteKey || unit.id || unit.name);
+            const spriteKey = unit.spriteKey || unit.battleSprite || unit.id || unit.name;
+            const sprite = scene.add.image(cell.x, cell.y, spriteKey);
             sprite.setData('unitId', unit.uniqueId);
+            sprite.setDisplaySize(cell.width, cell.height);
         });
     }
 
@@ -49,8 +51,10 @@ class FormationEngine {
             const cell = cells.splice(Math.floor(Math.random() * cells.length), 1)[0];
             if (!cell) return;
             cell.isOccupied = true;
-            const sprite = scene.add.image(cell.x, cell.y, mon.battleSprite || mon.spriteKey || mon.id || mon.name);
+            const spriteKey = mon.spriteKey || mon.battleSprite || mon.id || mon.name;
+            const sprite = scene.add.image(cell.x, cell.y, spriteKey);
             sprite.setData('unitId', mon.uniqueId);
+            sprite.setDisplaySize(cell.width, cell.height);
         });
     }
 }
