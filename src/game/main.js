@@ -7,6 +7,11 @@ import { Preloader } from './scenes/Preloader.js';
 import { TerritoryScene } from './scenes/TerritoryScene.js';
 // 게임 해상도와 그리드 규격을 관리하는 SurveyEngine을 불러옵니다.
 import { surveyEngine } from './utils/SurveyEngine.js';
+
+// --- 슈퍼샘플링을 위한 렌더링 배율 설정 ---
+const RENDER_SCALE = 2;
+const RENDER_WIDTH = surveyEngine.canvas.width * RENDER_SCALE;
+const RENDER_HEIGHT = surveyEngine.canvas.height * RENDER_SCALE;
 // phaser 모듈을 직접 불러오면 로컬 서버에서 해석되지 않으므로
 // node_modules 경로를 상대 경로로 지정합니다.
 // Phaser를 CDN에서 불러와 배포 시 404 오류를 방지합니다.
@@ -16,9 +21,9 @@ import * as Phaser from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
     type: Phaser.AUTO,
-    // SurveyEngine에서 캔버스 크기를 가져옵니다.
-    width: surveyEngine.canvas.width,
-    height: surveyEngine.canvas.height,
+    // 실제 렌더링 해상도를 기준 해상도의 2배로 설정합니다.
+    width: RENDER_WIDTH,
+    height: RENDER_HEIGHT,
     parent: 'game-container',
     transparent: true, // 캔버스 자체를 투명하게 설정합니다.
     backgroundColor: 'transparent', // 배경색을 투명하게 만듭니다.
