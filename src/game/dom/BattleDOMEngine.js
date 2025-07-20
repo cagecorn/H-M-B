@@ -10,6 +10,8 @@ export class BattleDOMEngine {
             document.getElementById('app').appendChild(this.container);
         }
         this.grid = null;
+        this.zoom = 1;
+        this._wheelHandler = null;
     }
 
     createStage(bgImage) {
@@ -20,6 +22,15 @@ export class BattleDOMEngine {
         grid.id = 'battle-grid';
         this.container.appendChild(grid);
         this.grid = grid;
+        this.grid.style.setProperty('--battle-zoom', this.zoom);
+
+        this._wheelHandler = (e) => {
+            e.preventDefault();
+            const delta = e.deltaY * -0.001;
+            this.zoom = Math.min(2, Math.max(0.5, this.zoom + delta));
+            this.grid.style.setProperty('--battle-zoom', this.zoom);
+        };
+        this.grid.addEventListener('wheel', this._wheelHandler, { passive: false });
 
         const cols = 16;
         const rows = 9;
@@ -65,5 +76,8 @@ export class BattleDOMEngine {
     destroy() {
         this.container.innerHTML = '';
         this.container.style.display = 'none';
+        if (this.grid && this._wheelHandler) {
+            this.grid.removeEventListener('wheel', this._wheelHandler);
+        }
     }
 }
