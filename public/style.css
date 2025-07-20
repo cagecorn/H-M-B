@@ -15,31 +15,27 @@ body {
 }
 
 #ui-container {
-    /* 화면 전체를 덮도록 설정하고, 캔버스 위에 위치시킵니다. */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* 이 컨테이너 자체는 클릭되지 않도록 하여, 아래 캔버스로 클릭 이벤트가 전달되게 합니다. */
     pointer-events: none;
-    overflow: hidden; /* 화면 밖으로 나가는 UI는 숨깁니다. */
+    overflow: hidden;
+    z-index: 100;
 }
 
-/* UI 요소들의 기본 스타일입니다. */
 .ui-element {
-    /* 개별 UI 요소는 다시 클릭 가능하도록 설정합니다. */
     pointer-events: all;
     padding: 8px;
     background-color: rgba(0, 0, 0, 0.7);
     border: 1px solid #fff;
     border-radius: 5px;
     color: #fff;
-    /* 사용자가 텍스트를 선택할 수 없도록 하여 더블클릭 시 불편함을 줄입니다. */
     user-select: none;
 }
 
-/* --- 영지 화면 DOM 스타일 (수정된 버전) --- */
+/* --- 영지 화면 DOM 스타일 --- */
 
 #territory-container {
     position: absolute;
@@ -48,7 +44,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: 10;
-    pointer-events: none;
+    pointer-events: none; 
     background-size: cover;
     background-position: center;
     background-image: url(../assets/images/territory/city-1.png);
@@ -56,16 +52,12 @@ body {
 
 #territory-grid {
     position: absolute;
-    /* surveyEngine 값에 따라 JS가 아닌 CSS 변수로 제어 (나중에 확장 가능) */
-    /* 지금은 하드코딩으로 가장 보기 좋은 위치에 배치합니다. */
     top: 35%;
     left: 15%;
     width: 40%;
     height: 50%;
-
     display: grid;
-    gap: 15px; /* 칸 사이의 간격 */
-    /* 이제부터는 하위 요소들이 포인터 이벤트를 받을 수 있음 */
+    gap: 15px;
     pointer-events: auto;
 }
 
@@ -77,29 +69,27 @@ body {
     background-position: center;
     cursor: pointer;
     transition: transform 0.1s ease-in-out;
-
-    /* 이미지를 부드럽게 표시하기 위해 별도의 렌더링 옵션을 사용하지 않습니다. */
 }
 
 .building-icon:hover {
     transform: scale(1.1);
 }
 
-/* --- 선술집 뷰 스타일 --- */
+/* --- 선술집 뷰 스타일 (수정) --- */
 #tavern-view {
     width: 100%;
     height: 100%;
     position: relative;
     pointer-events: auto;
+    display: flex; /* Flexbox를 사용하여 중앙 정렬 */
+    justify-content: center;
+    align-items: center;
 }
 
 #tavern-grid {
-    position: absolute;
-    bottom: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 25%;
+    /* position, top, left, transform 속성 제거 */
+    width: 60%; /* 너비 조정 */
+    height: 20%; /* 높이 조정 */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -120,7 +110,7 @@ body {
     filter: brightness(1.2);
 }
 
-/* --- 용병 고용 모달 스타일 --- */
+/* --- 용병 고용 모달 스타일 (수정) --- */
 #hire-modal-overlay {
     position: fixed;
     top: 0;
@@ -137,7 +127,8 @@ body {
 
 #hire-modal-content {
     position: relative;
-    background-color: #1a1a1a;
+    /* 배경을 반투명하게 수정 */
+    background-color: rgba(26, 26, 26, 0.85); 
     padding: 20px;
     border-radius: 10px;
     border: 2px solid #444;
@@ -179,5 +170,5 @@ body {
 /* Phaser 게임 캔버스를 담는 컨테이너 */
 #game-container {
     position: absolute;
-    z-index: 1; /* DOM 영지보다 낮은 숫자를 주어 아래로 내립니다. */
+    z-index: 1; 
 }
