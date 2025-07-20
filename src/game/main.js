@@ -23,10 +23,6 @@ const config = {
     parent: 'game-container',
     backgroundColor: 'transparent', // 배경색을 투명하게
     transparent: true, // 캔버스 자체를 투명하게 설정
-    // --- 수정 및 추가 ---
-    pixelArt: true, // 픽셀 아트 모드를 활성화하여 뭉개짐을 방지합니다.
-
-    // 기기의 픽셀 비율에 따라 해상도를 자동으로 조정합니다.
     resolution: window.devicePixelRatio || 1,
     scale: {
         mode: Phaser.Scale.FIT,
