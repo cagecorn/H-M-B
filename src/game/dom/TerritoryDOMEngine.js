@@ -316,5 +316,6 @@ export class TerritoryDOMEngine {
 
     destroy() {
         this.container.innerHTML = '';
+        this.container.style.display = 'none';
     }
 }
