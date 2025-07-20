@@ -29,7 +29,8 @@ export class TerritoryScene extends Scene {
 
         // 씬이 종료될 때 DOM 요소들을 정리하도록 이벤트를 설정합니다.
         this.events.on('shutdown', () => {
-            territoryDomEngine.destroy();
+            // PartyScene 전환 시 DOM을 유지하기 위해 파괴하지 않습니다.
+            // territoryDomEngine.destroy();
         });
     }
 }
