@@ -592,6 +592,7 @@ body {
     background-repeat: no-repeat;
     background-position: center bottom;
     cursor: grab;
+    will-change: transform;
 }
 
 .formation-unit-name {
@@ -658,4 +659,5 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center bottom;
+    will-change: transform;
 }
