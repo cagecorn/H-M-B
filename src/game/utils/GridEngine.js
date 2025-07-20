@@ -23,7 +23,7 @@ export class GridEngine {
         debugLogEngine.log('GridEngine', `${cols}x${rows} 그리드를 생성합니다.`);
 
         // 디버깅 목적으로 그리드를 시각적으로 표시할 그래픽스 객체
-        this.graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0x00ff00, alpha: 0.5 } });
+        const graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0x00ff00, alpha: 0.5 } });
 
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
@@ -43,7 +43,7 @@ export class GridEngine {
                 this.gridCells.push(cell);
 
                 // 디버깅용 사각형을 그립니다. 나중에 이 부분만 주석 처리하면 보이지 않게 됩니다.
-                this.graphics.strokeRect(cellX, cellY, cellWidth, cellHeight);
+                graphics.strokeRect(cellX, cellY, cellWidth, cellHeight);
             }
         }
     }
