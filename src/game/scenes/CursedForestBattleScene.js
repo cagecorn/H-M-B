@@ -4,6 +4,7 @@ import { formationEngine } from '../utils/FormationEngine.js';
 import { mercenaryEngine } from '../utils/MercenaryEngine.js';
 import { partyEngine } from '../utils/PartyEngine.js';
 import { monsterEngine } from '../utils/MonsterEngine.js';
+import { getMonsterBase } from '../data/monster.js';
 
 export class CursedForestBattleScene extends Scene {
     constructor() {
@@ -29,14 +30,9 @@ export class CursedForestBattleScene extends Scene {
 
         // 적 몬스터 생성 및 배치
         const monsters = [];
+        const zombieBase = getMonsterBase('zombie');
         for (let i = 0; i < 5; i++) {
-            monsters.push(
-                monsterEngine.spawnMonster({
-                    name: '좀비',
-                    battleSprite: 'zombie',
-                    baseStats: { hp: 50, valor: 0, strength: 5, endurance: 3, agility: 1, intelligence: 0, wisdom: 0, luck: 0 }
-                }, 'enemy')
-            );
+            monsters.push(monsterEngine.spawnMonster(zombieBase, 'enemy'));
         }
         formationEngine.placeMonsters(this, monsters, 8);
 
