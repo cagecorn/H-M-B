@@ -12,7 +12,6 @@ import { PartyScene } from './PartyScene.js';
 import { DungeonScene } from './DungeonScene.js';
 import { FormationScene } from './FormationScene.js';
 import { CursedForestBattleScene } from './CursedForestBattleScene.js';
-import { CompatibilityManager } from '../utils/CompatibilityManager.js';
 
 export class Boot extends Scene
 {
@@ -41,9 +40,6 @@ export class Boot extends Scene
         this.scene.add('DungeonScene', DungeonScene);
         this.scene.add('FormationScene', FormationScene);
         this.scene.add('CursedForestBattle', CursedForestBattleScene);
-
-        // 창 크기에 따라 오버레이 캔버스 해상도를 조정하는 매니저를 초기화합니다.
-        this.compatibilityManager = new CompatibilityManager();
 
         this.scene.start('Preloader');
     }
