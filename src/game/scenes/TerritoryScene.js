@@ -11,6 +11,11 @@ export class TerritoryScene extends Scene {
     }
 
     create() {
+        // 파티 관리 씬에서 돌아올 때 가려졌을 수 있는 영지 컨테이너를 다시 표시합니다.
+        const territoryContainer = document.getElementById('territory-container');
+        if (territoryContainer) {
+            territoryContainer.style.display = 'block';
+        }
         // 중요: 이제 이 씬은 비어있습니다.
         // 모든 시각적 요소는 DOM 엔진들이 담당합니다.
         
