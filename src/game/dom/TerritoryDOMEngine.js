@@ -1,8 +1,7 @@
 import { surveyEngine } from '../utils/SurveyEngine.js';
 import { DOMEngine } from '../utils/DOMEngine.js';
-// StatEngine과 함께 MercenaryEngine을 불러옵니다.
-import { statEngine } from '../utils/StatEngine.js';
 import { mercenaryEngine } from '../utils/MercenaryEngine.js';
+import { statEngine } from "../utils/StatEngine.js";
 
 /**
  * 영지 화면의 DOM 요소를 생성하고 관리하는 전용 엔진
@@ -15,15 +14,14 @@ export class TerritoryDOMEngine {
         this.grid = null;
         this.tavernView = null;
         this.hireModal = null;
-        this.unitDetailView = null; // 유닛 상세 정보창 컨테이너
+        this.unitDetailView = null;
 
-        // --- 용병 기본 데이터 정의 ---
         this.mercenaries = {
             warrior: {
                 id: 'warrior',
                 name: '전사',
                 hireImage: 'assets/images/territory/warrior-hire.png',
-                uiImage: 'assets/images/territory/warrior-ui.png', // 상세 정보창용 이미지
+                uiImage: 'assets/images/territory/warrior-ui.png',
                 description: '"그는 단 한 사람을 지키기 위해 검을 든다."',
                 baseStats: {
                     hp: 120, valor: 10, strength: 15, endurance: 12,
@@ -34,7 +32,7 @@ export class TerritoryDOMEngine {
                 id: 'gunner',
                 name: '거너',
                 hireImage: 'assets/images/territory/gunner-hire.png',
-                uiImage: 'assets/images/territory/gunner-ui.png', // 상세 정보창용 이미지
+                uiImage: 'assets/images/territory/gunner-ui.png',
                 description: '"한 발, 한 발. 신중하게, 그리고 차갑게."',
                 baseStats: {
                     hp: 80, valor: 5, strength: 7, endurance: 6,
@@ -86,10 +84,8 @@ export class TerritoryDOMEngine {
     }
 
     showTavernView() {
-        // 기존 그리드 숨기기
         this.grid.style.display = 'none';
 
-        // 배경 이미지 변경
         this.container.style.backgroundImage = `url(assets/images/territory/tavern-scene.png)`;
 
         this.tavernView = document.createElement('div');
@@ -121,15 +117,23 @@ export class TerritoryDOMEngine {
 
         this.hireModal = document.createElement('div');
         this.hireModal.id = 'hire-modal-overlay';
-
+        
         const modalContent = document.createElement('div');
         modalContent.id = 'hire-modal-content';
 
         const imageViewer = document.createElement('div');
         imageViewer.id = 'hire-image-viewer';
-
+        
         const mercenaryImage = document.createElement('img');
         mercenaryImage.id = 'mercenary-image';
+
+        mercenaryImage.onclick = () => {
+            const baseMercenaryData = this.mercenaryList[this.currentMercenaryIndex];
+            const newInstance = mercenaryEngine.hireMercenary(baseMercenaryData, 'ally');
+            
+            this.hideHireModal();
+            this.showUnitDetails(newInstance);
+        };
 
         const leftArrow = document.createElement('div');
         leftArrow.className = 'hire-arrow';
@@ -145,13 +149,24 @@ export class TerritoryDOMEngine {
         closeButton.id = 'hire-modal-close';
         closeButton.innerText = 'X';
         closeButton.onclick = () => this.hideHireModal();
-
+        
+        const hireEnemyButton = document.createElement('div');
+        hireEnemyButton.id = 'hire-enemy-button';
+        hireEnemyButton.innerText = '[적군 생성]';
+        hireEnemyButton.onclick = (event) => {
+            const baseMercenaryData = this.mercenaryList[this.currentMercenaryIndex];
+            mercenaryEngine.hireMercenary(baseMercenaryData, 'enemy');
+            this.domEngine.showTooltip(event.clientX, event.clientY, `적군 ${baseMercenaryData.name} 생성됨!`);
+            setTimeout(() => this.domEngine.hideTooltip(), 1000);
+        };
+        
         imageViewer.appendChild(leftArrow);
         imageViewer.appendChild(mercenaryImage);
         imageViewer.appendChild(rightArrow);
 
         modalContent.appendChild(closeButton);
         modalContent.appendChild(imageViewer);
+        modalContent.appendChild(hireEnemyButton);
         this.hireModal.appendChild(modalContent);
         this.container.appendChild(this.hireModal);
 
@@ -161,19 +176,8 @@ export class TerritoryDOMEngine {
         });
 
         this.updateMercenaryImage();
-
-        // 이미지를 클릭하면 MercenaryEngine을 통해 고용을 진행합니다.
-        mercenaryImage.onclick = () => {
-            const baseMercenaryData = this.mercenaryList[this.currentMercenaryIndex];
-            // 1. MercenaryEngine에 고용을 요청합니다.
-            const newInstance = mercenaryEngine.hireMercenary(baseMercenaryData);
-
-            // 2. 고용 창을 닫고, 반환된 새 인스턴스로 상세 정보창을 엽니다.
-            this.hideHireModal();
-            this.showUnitDetails(newInstance);
-        };
     }
-
+    
     hideHireModal() {
         if (this.hireModal) {
             this.hireModal.remove();
@@ -202,17 +206,11 @@ export class TerritoryDOMEngine {
         }
     }
 
-    /**
-     * 유닛 상세 정보 UI를 생성하고 표시합니다.
-     * @param {object} unitData - 표시할 유닛의 데이터 (고유 인스턴스)
-     */
     showUnitDetails(unitData) {
         if (this.unitDetailView) this.unitDetailView.remove();
 
-        // 1. StatEngine을 사용하여 최종 스탯을 계산합니다.
         const finalStats = statEngine.calculateStats(unitData, unitData.baseStats, []);
 
-        // 2. UI 레이아웃을 동적으로 생성합니다.
         this.unitDetailView = document.createElement('div');
         this.unitDetailView.id = 'unit-detail-overlay';
         this.unitDetailView.onclick = (e) => {
