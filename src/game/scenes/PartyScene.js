@@ -11,9 +11,8 @@ export class PartyScene extends Scene {
     }
 
     preload() {
+        // Preloader에서 대부분의 에셋을 로드하므로, 이 씬 전용 배경만 로드합니다.
         this.load.image('party-scene-bg', 'assets/images/territory/party-scene.png');
-        this.load.image('warrior-small', 'assets/images/unit/warrior.png');
-        this.load.image('gunner-small', 'assets/images/unit/gunner.png');
     }
 
     create() {
@@ -28,9 +27,17 @@ export class PartyScene extends Scene {
         this.unitDetailContainer = this.add.container(this.cameras.main.centerX, 400);
 
         // 뒤로 가기 버튼 (임시)
-        const backButton = this.add.text(20, 20, '영지로 돌아가기', { fontSize: '20px', fill: '#fff', backgroundColor: '#000' })
+        // 뒤로 가기 버튼
+        this.add.text(20, 20, '영지로 돌아가기', { fontSize: '20px', fill: '#fff', backgroundColor: '#000' })
             .setInteractive()
-            .on('pointerdown', () => this.scene.start('TerritoryScene'));
+            .on('pointerdown', () => {
+                // 숨겨진 영지 DOM 컨테이너를 다시 표시합니다.
+                const territoryContainer = document.getElementById('territory-container');
+                if (territoryContainer) {
+                    territoryContainer.style.display = 'block';
+                }
+                this.scene.start('TerritoryScene');
+            });
     }
 
     createPartyGrid() {
@@ -50,18 +57,20 @@ export class PartyScene extends Scene {
             this.partyGridContainer.add(cell);
 
             if (partyMembers.length > i) {
-                const unitId = partyMembers [i];
+                const unitId = partyMembers[i];
                 const unitData = allMercenaries.find(merc => merc.uniqueId === unitId);
                 if (unitData) {
-                    let spriteKey = '';
-                    if (unitData.id === 'warrior') {
-                        spriteKey = 'warrior-small';
-                    } else if (unitData.id === 'gunner') {
-                        spriteKey = 'gunner-small';
-                    }
+                    // Preloader에 정의된 UI용 이미지 키를 사용합니다.
+                    const spriteKey = unitData.id + '-ui';
 
-                    if (spriteKey) {
-                        const sprite = this.add.image(x, y, spriteKey).setOrigin(0.5).setScale(0.8).setInteractive();
+                    if (this.textures.exists(spriteKey)) {
+                        const sprite = this.add.image(x, y, spriteKey).setOrigin(0.5).setInteractive();
+
+                        // 타일 크기에 맞도록 동적으로 스케일을 계산합니다.
+                        const texture = this.textures.get(spriteKey);
+                        const scale = cellWidth / texture.source[0].width;
+                        sprite.setScale(scale);
+
                         sprite.unitId = unitId;
                         sprite.on('pointerdown', () => this.showUnitDetails(unitId));
                         this.partyMemberSprites.push(sprite);

@@ -96,6 +96,10 @@ export class TerritoryDOMEngine {
         button.addEventListener('mouseout', () => this.domEngine.hideTooltip());
         button.addEventListener('click', () => {
             console.log('용병 관리 버튼 클릭');
+
+            // DOM을 파괴하는 대신 영지 컨테이너를 일시적으로 숨깁니다.
+            this.container.style.display = 'none';
+
             this.scene.scene.start('PartyScene');
         });
         this.grid.appendChild(button);
