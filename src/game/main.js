@@ -11,7 +11,7 @@ import { surveyEngine } from './utils/SurveyEngine.js';
 // node_modules 경로를 상대 경로로 지정합니다.
 // Phaser를 CDN에서 불러와 배포 시 404 오류를 방지합니다.
 // ESM 빌드에는 기본 내보내기가 없으므로 전체 네임스페이스를 가져옵니다.
-import * as Phaser from "https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js";
+import * as Phaser from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
