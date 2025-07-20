@@ -151,9 +151,11 @@ export class PartyDOMEngine {
         const detailPane = document.createElement('div');
         detailPane.id = 'unit-detail-pane';
 
+        const instanceName = unitData.instanceName || unitData.name;
         detailPane.innerHTML += `
             <div class="detail-header">
-                <span class="unit-name">no.${unitData.uniqueId.toString().padStart(3, '0')} ${unitData.name}</span>
+                <span class="unit-name">${instanceName}</span>
+                <span class="unit-class">${unitData.name}</span>
                 <span class="unit-level">Lv. ${unitData.level}</span>
             </div>
             <div id="unit-detail-close" onclick="this.closest('#unit-detail-overlay').remove()">X</div>
@@ -166,12 +168,6 @@ export class PartyDOMEngine {
         leftSection.className = 'detail-section left';
         leftSection.innerHTML = `
             <div class="unit-portrait" style="background-image: url(${unitData.uiImage})"></div>
-            <div class="unit-description">"${unitData.description}"</div>
-        `;
-
-        const rightSection = document.createElement('div');
-        rightSection.className = 'detail-section right';
-        rightSection.innerHTML = `
             <div class="stats-grid">
                 <div class="section-title">스탯</div>
                 <div class="stat-item"><span>HP</span><span>${finalStats.hp}</span></div>
@@ -183,6 +179,19 @@ export class PartyDOMEngine {
                 <div class="stat-item"><span>지혜</span><span>${finalStats.wisdom}</span></div>
                 <div class="stat-item"><span>행운</span><span>${finalStats.luck}</span></div>
             </div>
+            <div class="traits-section">
+                <div class="section-title">특성 (미구현)</div>
+                <div class="placeholder-box"></div>
+            </div>
+            <div class="synergy-section">
+                <div class="section-title">시너지 (미구현)</div>
+                <div class="placeholder-box"></div>
+            </div>
+        `;
+
+        const rightSection = document.createElement('div');
+        rightSection.className = 'detail-section right';
+        rightSection.innerHTML = `
             <div class="equipment-grid">
                 <div class="section-title">장비</div>
                 <div class="equip-slot"></div>
@@ -190,15 +199,6 @@ export class PartyDOMEngine {
                 <div class="equip-slot"></div>
                 <div class="equip-slot"></div>
                 <div class="equip-slot"></div>
-            </div>
-        `;
-
-        const detailFooter = document.createElement('div');
-        detailFooter.className = 'detail-footer';
-        detailFooter.innerHTML = `
-            <div class="unit-class">
-                <div class="section-title">병종</div>
-                <div class="class-icon"></div>
             </div>
             <div class="unit-skills">
                 <div class="section-title">스킬</div>
@@ -213,7 +213,6 @@ export class PartyDOMEngine {
         detailContent.appendChild(leftSection);
         detailContent.appendChild(rightSection);
         detailPane.appendChild(detailContent);
-        detailPane.appendChild(detailFooter);
         this.unitDetailView.appendChild(detailPane);
         this.container.appendChild(this.unitDetailView);
     }
