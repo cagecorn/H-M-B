@@ -3,8 +3,9 @@
  */
 class PartyEngine {
     constructor() {
-        this.partyMembers = []; // 고용된 아군 용병의 ID를 저장하는 배열 (최대 12명)
         this.maxPartySize = 12;
+        // 고정 크기의 파티 슬롯을 초기화합니다. 비어있는 슬롯은 undefined로 표시됩니다.
+        this.partyMembers = new Array(this.maxPartySize).fill(undefined);
     }
 
     /**
@@ -13,14 +14,14 @@ class PartyEngine {
      * @returns {boolean} - 파티 추가 성공 여부 (파티가 가득 찼으면 false)
      */
     addPartyMember(unitId) {
-        if (this.partyMembers.length < this.maxPartySize) {
-            this.partyMembers.push(unitId);
+        const emptyIndex = this.partyMembers.indexOf(undefined);
+        if (emptyIndex !== -1) {
+            this.partyMembers[emptyIndex] = unitId;
             console.log(`용병 (ID: ${unitId})이 파티에 합류했습니다. 현재 파티:`, this.partyMembers);
             return true;
-        } else {
-            console.warn('파티가 가득 찼습니다!');
-            return false;
         }
+        console.warn('파티가 가득 찼습니다!');
+        return false;
     }
 
     /**
@@ -28,8 +29,26 @@ class PartyEngine {
      * @param {number} unitId - 제거할 용병의 고유 ID
      */
     removePartyMember(unitId) {
-        this.partyMembers = this.partyMembers.filter(id => id !== unitId);
-        console.log(`용병 (ID: ${unitId})이 파티에서 떠났습니다. 현재 파티:`, this.partyMembers);
+        const index = this.partyMembers.indexOf(unitId);
+        if (index !== -1) {
+            this.partyMembers[index] = undefined;
+            console.log(`용병 (ID: ${unitId})이 파티에서 떠났습니다. 현재 파티:`, this.partyMembers);
+        }
+    }
+
+    /**
+     * 특정 슬롯에 용병을 배치합니다. 기존에 배치된 용병은 해제됩니다.
+     * @param {number} slotIndex - 대상 슬롯 인덱스
+     * @param {number} unitId - 배치할 용병 ID
+     */
+    setPartyMember(slotIndex, unitId) {
+        if (slotIndex < 0 || slotIndex >= this.maxPartySize) return;
+        const currentIndex = this.partyMembers.indexOf(unitId);
+        if (currentIndex !== -1) {
+            this.partyMembers[currentIndex] = undefined;
+        }
+        this.partyMembers[slotIndex] = unitId;
+        console.log(`용병 (ID: ${unitId})이 ${slotIndex}번 슬롯에 배치되었습니다.`, this.partyMembers);
     }
 
     /**
@@ -37,7 +56,7 @@ class PartyEngine {
      * @returns {Array<number>} - 파티 멤버의 ID 배열
      */
     getPartyMembers() {
-        return [...this.partyMembers]; // 복사본을 반환하여 외부에서 직접 수정하는 것을 방지
+        return [...this.partyMembers];
     }
 }
 

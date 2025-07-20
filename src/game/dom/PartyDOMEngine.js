@@ -14,7 +14,8 @@ export class PartyDOMEngine {
             this.container.id = 'party-container';
             document.getElementById('app').appendChild(this.container);
         }
-        this.grid = null;
+        this.activeGrid = null;
+        this.reserveGrid = null;
         this.unitDetailView = null;
 
         this.container.style.display = 'block';
@@ -24,31 +25,103 @@ export class PartyDOMEngine {
     }
 
     createGrid() {
-        this.grid = document.createElement('div');
-        this.grid.id = 'party-grid';
-        this.container.appendChild(this.grid);
+        const wrapper = document.createElement('div');
+        wrapper.id = 'party-grid';
+        this.container.appendChild(wrapper);
 
-        this.renderPartyMembers();
+        this.activeGrid = document.createElement('div');
+        this.activeGrid.id = 'party-active-grid';
+        wrapper.appendChild(this.activeGrid);
+
+        this.reserveGrid = document.createElement('div');
+        this.reserveGrid.id = 'party-reserve-grid';
+        wrapper.appendChild(this.reserveGrid);
+
+        this.reserveGrid.addEventListener('dragover', (e) => e.preventDefault());
+        this.reserveGrid.addEventListener('drop', (e) => {
+            const unitId = parseInt(e.dataTransfer.getData('text/plain'));
+            partyEngine.removePartyMember(unitId);
+            this.refresh();
+        });
+
+        this.refresh();
     }
 
     renderPartyMembers() {
         const partyMembers = mercenaryEngine.getPartyMembers();
         const allMercenaries = mercenaryEngine.getAllAlliedMercenaries();
 
+        this.activeGrid.innerHTML = '';
         for (let i = 0; i < 12; i++) {
             const slot = document.createElement('div');
             slot.className = 'party-slot';
+            slot.dataset.index = i;
+            slot.addEventListener('dragover', (e) => e.preventDefault());
+            slot.addEventListener('drop', (e) => {
+                const unitId = parseInt(e.dataTransfer.getData('text/plain'));
+                partyEngine.setPartyMember(i, unitId);
+                this.refresh();
+            });
+
+            const img = document.createElement('div');
+            img.className = 'party-slot-image';
 
             const unitId = partyMembers[i];
+            let unitData = null;
             if (unitId) {
-                const unitData = allMercenaries.find(m => m.uniqueId === unitId);
+                unitData = allMercenaries.find(m => m.uniqueId === unitId);
                 if (unitData) {
-                    slot.style.backgroundImage = `url(${unitData.uiImage})`;
-                    slot.addEventListener('click', () => this.showUnitDetails(unitData));
+                    img.style.backgroundImage = `url(${unitData.uiImage})`;
+                    img.addEventListener('click', () => this.showUnitDetails(unitData));
+                    img.draggable = true;
+                    img.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', unitData.uniqueId);
+                    });
                 }
             }
-            this.grid.appendChild(slot);
+
+            const label = document.createElement('div');
+            label.className = 'slot-name';
+            label.innerText = unitData ? (unitData.instanceName || unitData.name) : '';
+
+            slot.appendChild(img);
+            slot.appendChild(label);
+            this.activeGrid.appendChild(slot);
         }
+    }
+
+    renderReserveMembers() {
+        const partyMembers = mercenaryEngine.getPartyMembers();
+        const allMercenaries = mercenaryEngine.getAllAlliedMercenaries();
+        const reserveUnits = allMercenaries.filter(m => !partyMembers.includes(m.uniqueId));
+
+        this.reserveGrid.innerHTML = '';
+        reserveUnits.forEach(unitData => {
+            const unitDiv = document.createElement('div');
+            unitDiv.className = 'reserve-unit';
+            unitDiv.draggable = true;
+            unitDiv.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', unitData.uniqueId);
+            });
+
+            const img = document.createElement('div');
+            img.className = 'reserve-image';
+            img.style.backgroundImage = `url(${unitData.uiImage})`;
+            img.addEventListener('click', () => this.showUnitDetails(unitData));
+
+            const label = document.createElement('div');
+            label.className = 'slot-name';
+            label.innerText = unitData.instanceName || unitData.name;
+
+            unitDiv.appendChild(img);
+            unitDiv.appendChild(label);
+            this.reserveGrid.appendChild(unitDiv);
+        });
+    }
+
+    refresh() {
+        this.renderPartyMembers();
+        this.renderReserveMembers();
     }
 
     addBackButton() {

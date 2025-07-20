@@ -67,22 +67,59 @@ body {
 
 #party-grid {
     position: absolute;
-    top: 35%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#party-active-grid {
+    position: absolute;
+    top: 5%;
     left: 50%;
     transform: translateX(-50%);
-    width: 70%;
-    height: 40%;
+    width: 90%;
+    height: 25%;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: 10px;
     pointer-events: auto;
 }
 
-.party-slot {
+#party-reserve-grid {
+    position: absolute;
+    top: 35%;
+    left: 5%;
+    width: 90%;
+    height: 60%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    overflow-y: auto;
+    pointer-events: auto;
+}
+
+.party-slot, .reserve-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.party-slot-image, .reserve-image {
+    width: 100%;
+    height: 60px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
+}
+
+.slot-name {
+    font-size: 12px;
+    color: #fff;
+    margin-top: 4px;
+    text-align: center;
 }
 
 #party-back-button {
