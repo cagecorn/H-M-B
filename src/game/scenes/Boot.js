@@ -4,7 +4,8 @@ import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.es
 import { Preloader } from './Preloader.js';
 import { TerritoryScene } from './TerritoryScene.js';
 import { MainMenu } from './MainMenu.js';
-import { MainGame } from './Game.js';
+// Game 씬을 불러와 'MainGame'이라는 이름으로 등록합니다.
+import { Game as MainGame } from './Game.js';
 import { GameOver } from './GameOver.js';
 // --- PartyScene import 추가 ---
 import { PartyScene } from './PartyScene.js';
