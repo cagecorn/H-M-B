@@ -5,6 +5,7 @@ import { mercenaryEngine } from '../utils/MercenaryEngine.js';
 import { partyEngine } from '../utils/PartyEngine.js';
 import { monsterEngine } from '../utils/MonsterEngine.js';
 import { getMonsterBase } from '../data/monster.js';
+import { battleEngine } from '../utils/BattleEngine.js';
 
 export class CursedForestBattleScene extends Scene {
     constructor() {
@@ -34,6 +35,8 @@ export class CursedForestBattleScene extends Scene {
         }
         this.battleDomEngine.placeMonsters(monsters, 8);
 
+        battleEngine.startBattle(partyUnits, monsters);
+
         this.events.on('shutdown', () => {
             ['dungeon-container', 'territory-container'].forEach(id => {
                 const el = document.getElementById(id);
@@ -43,6 +46,11 @@ export class CursedForestBattleScene extends Scene {
             if (this.battleDomEngine) {
                 this.battleDomEngine.destroy();
             }
+            battleEngine.endBattle();
         });
+    }
+
+    update() {
+        battleEngine.update();
     }
 }

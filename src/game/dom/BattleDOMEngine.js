@@ -56,6 +56,10 @@ export class BattleDOMEngine {
             const unitDiv = document.createElement('div');
             unitDiv.className = 'battle-unit';
             unitDiv.style.backgroundImage = `url(${unit.battleSprite})`;
+            const name = document.createElement('div');
+            name.className = 'battle-unit-name ally';
+            name.innerText = unit.instanceName || unit.name;
+            unitDiv.appendChild(name);
             cell.appendChild(unitDiv);
         });
     }
@@ -69,6 +73,10 @@ export class BattleDOMEngine {
             const unitDiv = document.createElement('div');
             unitDiv.className = 'battle-unit';
             unitDiv.style.backgroundImage = `url(${mon.battleSprite})`;
+            const name = document.createElement('div');
+            name.className = 'battle-unit-name enemy';
+            name.innerText = mon.instanceName || mon.name;
+            unitDiv.appendChild(name);
             cell.appendChild(unitDiv);
         });
     }
