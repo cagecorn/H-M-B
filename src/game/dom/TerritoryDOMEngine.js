@@ -22,6 +22,7 @@ export class TerritoryDOMEngine {
                 name: '전사',
                 hireImage: 'assets/images/territory/warrior-hire.png',
                 uiImage: 'assets/images/territory/warrior-ui.png',
+                battleSprite: 'assets/images/unit/warrior.png',
                 description: '"그는 단 한 사람을 지키기 위해 검을 든다."',
                 baseStats: {
                     hp: 120, valor: 10, strength: 15, endurance: 12,
@@ -33,6 +34,7 @@ export class TerritoryDOMEngine {
                 name: '거너',
                 hireImage: 'assets/images/territory/gunner-hire.png',
                 uiImage: 'assets/images/territory/gunner-ui.png',
+                battleSprite: 'assets/images/unit/gunner.png',
                 description: '"한 발, 한 발. 신중하게, 그리고 차갑게."',
                 baseStats: {
                     hp: 80, valor: 5, strength: 7, endurance: 6,
@@ -49,6 +51,8 @@ export class TerritoryDOMEngine {
         this.addPartyManagementButton(1, 0);
         // --- 출정 버튼 추가 ---
         this.addExpeditionButton(2, 0);
+        // --- 진형 관리 버튼 추가 ---
+        this.addFormationButton(0, 1);
     }
 
     createGrid() {
@@ -118,6 +122,21 @@ export class TerritoryDOMEngine {
         button.addEventListener('click', () => {
             this.container.style.display = 'none';
             this.scene.scene.start('DungeonScene');
+        });
+        this.grid.appendChild(button);
+    }
+
+    addFormationButton(col, row) {
+        const button = document.createElement('div');
+        button.className = 'building-icon';
+        button.style.backgroundImage = `url(assets/images/territory/formation-icon.png)`;
+        button.style.gridColumnStart = col + 1;
+        button.style.gridRowStart = row + 1;
+        button.addEventListener('mouseover', (event) => this.domEngine.showTooltip(event.clientX, event.clientY, '[진형]'));
+        button.addEventListener('mouseout', () => this.domEngine.hideTooltip());
+        button.addEventListener('click', () => {
+            this.container.style.display = 'none';
+            this.scene.scene.start('FormationScene');
         });
         this.grid.appendChild(button);
     }

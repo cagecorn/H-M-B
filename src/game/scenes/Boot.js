@@ -10,6 +10,7 @@ import { GameOver } from './GameOver.js';
 // --- PartyScene import 추가 ---
 import { PartyScene } from './PartyScene.js';
 import { DungeonScene } from './DungeonScene.js';
+import { FormationScene } from './FormationScene.js';
 
 export class Boot extends Scene
 {
@@ -36,6 +37,7 @@ export class Boot extends Scene
         // --- PartyScene 추가 ---
         this.scene.add('PartyScene', PartyScene);
         this.scene.add('DungeonScene', DungeonScene);
+        this.scene.add('FormationScene', FormationScene);
 
         this.scene.start('Preloader');
     }
