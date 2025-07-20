@@ -18,7 +18,7 @@ export class DungeonScene extends Scene {
 
         const backButton = document.createElement('div');
         backButton.id = 'dungeon-back-button';
-        backButton.innerText = '← 영지로 돌아가기';
+        backButton.innerText = '←';
         backButton.addEventListener('click', () => {
             this.scene.start('TerritoryScene');
         });

@@ -152,7 +152,7 @@ export class TerritoryDOMEngine {
 
         const backButton = document.createElement('div');
         backButton.id = 'tavern-back-button';
-        backButton.innerText = '← 영지로 돌아가기';
+        backButton.innerText = '←';
         backButton.addEventListener('click', () => {
             this.hideTavernView();
         });
