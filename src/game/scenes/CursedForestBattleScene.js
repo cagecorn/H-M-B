@@ -1,6 +1,6 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
-import { BattleStageManager } from '../utils/BattleStageManager.js';
-import { formationEngine } from '../utils/FormationEngine.js';
+import { DOMEngine } from '../utils/DOMEngine.js';
+import { BattleDOMEngine } from '../dom/BattleDOMEngine.js';
 import { mercenaryEngine } from '../utils/MercenaryEngine.js';
 import { partyEngine } from '../utils/PartyEngine.js';
 import { monsterEngine } from '../utils/MonsterEngine.js';
@@ -9,32 +9,30 @@ import { getMonsterBase } from '../data/monster.js';
 export class CursedForestBattleScene extends Scene {
     constructor() {
         super('CursedForestBattle');
-        this.stageManager = null;
+        this.battleDomEngine = null;
     }
 
     create() {
-        // DOM 컨테이너들 숨기기
-        ['dungeon-container','territory-container'].forEach(id => {
+        ['dungeon-container', 'territory-container'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
         });
 
-        this.stageManager = new BattleStageManager(this);
-        this.stageManager.createStage('battle-stage-cursed-forest');
+        const domEngine = new DOMEngine(this);
+        this.battleDomEngine = new BattleDOMEngine(this, domEngine);
+        this.battleDomEngine.createStage('assets/images/battle/battle-stage-cursed-forest.png');
 
-        // 아군 배치
         const partyIds = partyEngine.getPartyMembers().filter(id => id !== undefined);
         const allMercs = mercenaryEngine.getAllAlliedMercenaries();
         const partyUnits = allMercs.filter(m => partyIds.includes(m.uniqueId));
-        formationEngine.applyFormation(this, partyUnits);
+        this.battleDomEngine.placeAllies(partyUnits);
 
-        // 적 몬스터 생성 및 배치
         const monsters = [];
         const zombieBase = getMonsterBase('zombie');
         for (let i = 0; i < 5; i++) {
             monsters.push(monsterEngine.spawnMonster(zombieBase, 'enemy'));
         }
-        formationEngine.placeMonsters(this, monsters, 8);
+        this.battleDomEngine.placeMonsters(monsters, 8);
 
         this.events.on('shutdown', () => {
             ['dungeon-container', 'territory-container'].forEach(id => {
@@ -42,8 +40,8 @@ export class CursedForestBattleScene extends Scene {
                 if (el) el.style.display = 'block';
             });
 
-            if (this.stageManager) {
-                this.stageManager.destroy();
+            if (this.battleDomEngine) {
+                this.battleDomEngine.destroy();
             }
         });
     }
