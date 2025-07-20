@@ -78,6 +78,10 @@ export class Preloader extends Scene
         this.load.image('cursed-forest', 'images/territory/cursed-forest.png');
         this.load.image('formation-icon', 'images/territory/formation-icon.png');
         this.load.image('battle-stage-arena', 'images/battle/battle-stage-arena.png');
+        this.load.image('battle-stage-cursed-forest', 'images/battle/battle-stage-cursed-forest.png');
+
+        // 몬스터 스프라이트 로드
+        this.load.image('zombie', 'images/unit/zombie.png');
     }
 
     create ()

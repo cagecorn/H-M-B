@@ -11,6 +11,7 @@ import { GameOver } from './GameOver.js';
 import { PartyScene } from './PartyScene.js';
 import { DungeonScene } from './DungeonScene.js';
 import { FormationScene } from './FormationScene.js';
+import { CursedForestBattleScene } from './CursedForestBattleScene.js';
 
 export class Boot extends Scene
 {
@@ -38,6 +39,7 @@ export class Boot extends Scene
         this.scene.add('PartyScene', PartyScene);
         this.scene.add('DungeonScene', DungeonScene);
         this.scene.add('FormationScene', FormationScene);
+        this.scene.add('CursedForestBattle', CursedForestBattleScene);
 
         this.scene.start('Preloader');
     }
