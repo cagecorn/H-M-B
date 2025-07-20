@@ -1,4 +1,5 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
+import * as Phaser from 'https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.esm.js';
 import { imageSizeManager } from '../utils/ImageSizeManager.js';
 
 export class Preloader extends Scene
@@ -86,6 +87,18 @@ export class Preloader extends Scene
 
     create ()
     {
+        // 전투 씬에서 사용될 주요 이미지들의 텍스처 필터링 모드를 설정하여 품질을 향상시킵니다.
+        const battleTextures = [
+            'warrior', 'gunner', 'zombie',
+            'battle-stage-cursed-forest', 'battle-stage-arena'
+        ];
+
+        battleTextures.forEach(key => {
+            if (this.textures.exists(key)) {
+                this.textures.get(key).setFilter(Phaser.Textures.FilterMode.TRILINEAR);
+            }
+        });
+
         // 모든 애셋이 로드되면 영지 씬으로 전환합니다.
         this.scene.start('TerritoryScene');
     }
