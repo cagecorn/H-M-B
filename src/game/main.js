@@ -23,16 +23,13 @@ const config = {
     transparent: true, // 캔버스 자체를 투명하게 설정합니다.
     backgroundColor: 'transparent', // 배경색을 투명하게 만듭니다.
     scale: {
-        // 화면을 가득 채우면서도 비율을 유지한다. 일부 영역이 잘릴 수 있음
-        mode: Phaser.Scale.ENVELOP,
+        mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     render: {
         pixelArt: false,
-        antialias: true,
-        // 고해상도 디스플레이는 Phaser가 자동으로 처리하므로 해상도 값을 고정
-        // 하고 CSS로 크기를 조절하는 편이 안정적이다.
-        resolution: 1,
+        antialias: true, // 안티에일리어싱을 활성화하여 이미지를 부드럽게 표현합니다.
+        resolution: window.devicePixelRatio || 1, // 기기의 픽셀 비율에 맞춰 해상도를 설정합니다.
     },
     // Boot 씬만 초기 설정에 등록합니다.
     // Boot 씬이 실행되면서 나머지 씬들을 동적으로 추가합니다.
