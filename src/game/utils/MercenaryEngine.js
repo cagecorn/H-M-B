@@ -1,5 +1,7 @@
 import { statEngine } from './StatEngine.js';
 import { birthReportManager } from '../debug/BirthReportManager.js';
+// PartyEngine을 불러옵니다.
+import { partyEngine } from './PartyEngine.js';
 
 /**
  * 용병의 생성, 저장, 관리를 전담하는 엔진 (싱글턴)
@@ -33,10 +35,12 @@ class MercenaryEngine {
         };
         
         newInstance.finalStats = statEngine.calculateStats(newInstance, newInstance.baseStats, newInstance.equippedItems);
-        
+
         if (type === 'ally') {
             this.alliedMercenaries.set(uniqueId, newInstance);
             birthReportManager.logNewUnit(newInstance, '아군');
+            // --- 파티에 추가 ---
+            partyEngine.addPartyMember(uniqueId);
         } else {
             this.enemyMercenaries.set(uniqueId, newInstance);
             birthReportManager.logNewUnit(newInstance, '적군');
@@ -47,6 +51,14 @@ class MercenaryEngine {
 
     getMercenaryById(uniqueId, type = 'ally') {
         return type === 'ally' ? this.alliedMercenaries.get(uniqueId) : this.enemyMercenaries.get(uniqueId);
+    }
+
+    getAllAlliedMercenaries() {
+        return Array.from(this.alliedMercenaries.values());
+    }
+
+    getPartyMembers() {
+        return partyEngine.getPartyMembers();
     }
 }
 
