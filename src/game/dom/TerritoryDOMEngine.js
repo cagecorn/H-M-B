@@ -47,6 +47,8 @@ export class TerritoryDOMEngine {
         this.addBuilding(0, 0, 'tavern-icon', '[여관]');
         // --- 용병 관리 버튼 추가 ---
         this.addPartyManagementButton(1, 0);
+        // --- 출정 버튼 추가 ---
+        this.addExpeditionButton(2, 0);
     }
 
     createGrid() {
@@ -101,6 +103,21 @@ export class TerritoryDOMEngine {
             this.container.style.display = 'none';
 
             this.scene.scene.start('PartyScene');
+        });
+        this.grid.appendChild(button);
+    }
+
+    addExpeditionButton(col, row) {
+        const button = document.createElement('div');
+        button.className = 'building-icon';
+        button.style.backgroundImage = `url(assets/images/territory/dungeon-icon.png)`;
+        button.style.gridColumnStart = col + 1;
+        button.style.gridRowStart = row + 1;
+        button.addEventListener('mouseover', (event) => this.domEngine.showTooltip(event.clientX, event.clientY, '[출정]'));
+        button.addEventListener('mouseout', () => this.domEngine.hideTooltip());
+        button.addEventListener('click', () => {
+            this.container.style.display = 'none';
+            this.scene.scene.start('DungeonScene');
         });
         this.grid.appendChild(button);
     }
