@@ -34,7 +34,16 @@ class FormationEngine {
             const spriteKey = unit.spriteKey || unit.battleSprite || unit.id || unit.name;
             const sprite = scene.add.image(cell.x, cell.y, spriteKey);
             sprite.setData('unitId', unit.uniqueId);
-            sprite.setDisplaySize(cell.width, cell.height);
+            const texture = scene.textures.get(spriteKey);
+            if (texture && texture.source[0]) {
+                const scale = Math.min(
+                    cell.width / texture.source[0].width,
+                    cell.height / texture.source[0].height
+                );
+                sprite.setScale(scale);
+            } else {
+                sprite.setDisplaySize(cell.width, cell.height);
+            }
         });
     }
 
@@ -54,7 +63,16 @@ class FormationEngine {
             const spriteKey = mon.spriteKey || mon.battleSprite || mon.id || mon.name;
             const sprite = scene.add.image(cell.x, cell.y, spriteKey);
             sprite.setData('unitId', mon.uniqueId);
-            sprite.setDisplaySize(cell.width, cell.height);
+            const texture = scene.textures.get(spriteKey);
+            if (texture && texture.source[0]) {
+                const scale = Math.min(
+                    cell.width / texture.source[0].width,
+                    cell.height / texture.source[0].height
+                );
+                sprite.setScale(scale);
+            } else {
+                sprite.setDisplaySize(cell.width, cell.height);
+            }
         });
     }
 }
