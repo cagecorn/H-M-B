@@ -16,9 +16,17 @@ export class BattleStageManager {
      */
     createStage(bgKey) {
         const { width, height } = this.scene.scale.gameSize;
-        const bg = this.scene.add.image(0, 0, bgKey).setOrigin(0);
-        // 배경 이미지를 현재 캔버스 크기에 맞게 조정하여 해상도 손실을 방지합니다.
-        bg.setDisplaySize(width, height);
+        const bg = this.scene.add.image(width / 2, height / 2, bgKey);
+
+        const bgTexture = this.scene.textures.get(bgKey);
+        const bgWidth = bgTexture.source[0].width;
+        const bgHeight = bgTexture.source[0].height;
+
+        const scaleX = width / bgWidth;
+        const scaleY = height / bgHeight;
+
+        const scale = Math.max(scaleX, scaleY);
+        bg.setScale(scale);
         const cellWidth = width / 16;
         const cellHeight = height / 9;
         this.gridEngine.createGrid({ x: 0, y: 0, cols: 16, rows: 9, cellWidth, cellHeight });
