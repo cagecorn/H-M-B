@@ -292,8 +292,9 @@ body {
 }
 
 #unit-detail-pane {
-    width: 800px;
-    height: 600px;
+    /* 가로형 레이아웃을 위해 크기 조정 */
+    width: 1000px;
+    height: 550px;
     background-color: #2c2a29;
     border: 3px solid #1a1817;
     border-radius: 8px;
@@ -345,10 +346,10 @@ body {
     flex-direction: column;
 }
 .detail-section.left {
-    width: 40%;
+    width: 50%;
 }
 .detail-section.right {
-    width: 60%;
+    width: 50%;
     display: flex;
     gap: 15px;
 }
@@ -372,6 +373,17 @@ body {
     padding: 10px;
     border-radius: 5px;
     text-align: center;
+}
+
+.traits-section, .synergy-section {
+    margin-top: 10px;
+}
+
+.placeholder-box {
+    height: 60px;
+    background-color: rgba(0,0,0,0.3);
+    border: 1px dashed #444;
+    border-radius: 4px;
 }
 
 .section-title {
