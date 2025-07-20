@@ -110,6 +110,14 @@ export class TerritoryDOMEngine {
         this.tavernView.id = 'tavern-view';
         this.container.appendChild(this.tavernView);
 
+        const backButton = document.createElement('div');
+        backButton.id = 'tavern-back-button';
+        backButton.innerText = '← 영지로 돌아가기';
+        backButton.addEventListener('click', () => {
+            this.hideTavernView();
+        });
+        this.tavernView.appendChild(backButton);
+
         const tavernGrid = document.createElement('div');
         tavernGrid.id = 'tavern-grid';
         this.tavernView.appendChild(tavernGrid);
@@ -201,6 +209,15 @@ export class TerritoryDOMEngine {
             this.hireModal.remove();
             this.hireModal = null;
         }
+    }
+
+    hideTavernView() {
+        if (this.tavernView) {
+            this.tavernView.remove();
+            this.tavernView = null;
+        }
+        this.container.style.backgroundImage = `url(assets/images/territory/city-1.png)`;
+        this.grid.style.display = 'grid';
     }
 
     changeMercenary(direction) {

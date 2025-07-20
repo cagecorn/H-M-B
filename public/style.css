@@ -86,6 +86,18 @@ body {
     align-items: center;
 }
 
+#tavern-back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 6px 12px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #fff;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+
 #tavern-grid {
     /* position, top, left, transform 속성 제거 */
     width: 60%; /* 너비 조정 */
