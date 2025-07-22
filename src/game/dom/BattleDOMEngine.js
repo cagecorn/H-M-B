@@ -1,4 +1,5 @@
 import { formationEngine } from '../utils/FormationEngine.js';
+import { bindingManager } from '../utils/BindingManager.js';
 
 export class BattleDOMEngine {
     constructor(scene) {
@@ -127,6 +128,7 @@ export class BattleDOMEngine {
             name.innerText = unit.instanceName || unit.name;
             unitDiv.appendChild(name);
             cell.appendChild(unitDiv);
+            bindingManager.bind(unit.uniqueId, { spriteElement: unitDiv });
         });
     }
 
@@ -144,6 +146,7 @@ export class BattleDOMEngine {
             name.innerText = mon.instanceName || mon.name;
             unitDiv.appendChild(name);
             cell.appendChild(unitDiv);
+            bindingManager.bind(mon.uniqueId, { spriteElement: unitDiv });
         });
     }
 
@@ -157,5 +160,6 @@ export class BattleDOMEngine {
             this.container.removeEventListener('mouseup', this._mouseUpHandler);
             this.container.removeEventListener('mouseleave', this._mouseLeaveHandler);
         }
+        bindingManager.clear();
     }
 }

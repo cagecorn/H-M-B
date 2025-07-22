@@ -1,4 +1,6 @@
 import { Particle } from './Particle.js';
+import { bindingManager } from './BindingManager.js';
+import { debugVFXManager } from '../debug/DebugVFXManager.js';
 
 /**
  * DOM 위에 투명한 캔버스를 띄워 파티클 등 시각 효과를 렌더링하는 엔진
@@ -16,6 +18,9 @@ export class VfxEngine {
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext('2d');
         vfxContainer.appendChild(this.canvas);
+
+        this.uiContainer = document.getElementById('ui-container');
+        this.healthBars = new Map();
 
         // 부모 컨테이너 크기에 맞춰 캔버스 크기 조절
         this.resizeCanvas();
@@ -63,6 +68,39 @@ export class VfxEngine {
         }
     }
 
+    createHealthBar(unit, maxHp) {
+        if (!unit || !unit.uniqueId) return;
+
+        const healthBarContainer = document.createElement('div');
+        healthBarContainer.className = 'health-bar-container';
+
+        const fill = document.createElement('div');
+        fill.className = 'health-bar-fill';
+        fill.style.width = '100%';
+
+        healthBarContainer.appendChild(fill);
+        this.uiContainer.appendChild(healthBarContainer);
+
+        this.healthBars.set(unit.uniqueId, {
+            container: healthBarContainer,
+            fill
+        });
+
+        const binding = bindingManager.getBinding(unit.uniqueId);
+        const sprite = binding?.spriteElement;
+        if (sprite) {
+            bindingManager.bind(unit.uniqueId, { spriteElement: sprite, vfxElement: healthBarContainer });
+        }
+    }
+
+    updateHealthBar(unitId, currentHp, maxHp) {
+        const bar = this.healthBars.get(unitId);
+        if (bar) {
+            const percentage = Math.max(0, (currentHp / maxHp) * 100);
+            bar.fill.style.width = `${percentage}%`;
+        }
+    }
+
     /**
      * 매 프레임마다 호출되는 애니메이션 루프
      */
@@ -84,6 +122,19 @@ export class VfxEngine {
             }
         }
 
+        this.healthBars.forEach((bar, unitId) => {
+            const binding = bindingManager.getBinding(unitId);
+            if (binding && binding.spriteElement && binding.vfxElement) {
+                const spriteRect = binding.spriteElement.getBoundingClientRect();
+                const containerRect = this.uiContainer.getBoundingClientRect();
+                const x = spriteRect.left - containerRect.left + (spriteRect.width / 2) - (bar.container.offsetWidth / 2);
+                const y = spriteRect.top - containerRect.top - 10;
+                bar.container.style.transform = `translate(${x}px, ${y}px)`;
+
+                debugVFXManager.logVFXCoordinates(bar.container, unitId);
+            }
+        });
+
         requestAnimationFrame(() => this.animate());
     }
 
@@ -97,5 +148,7 @@ export class VfxEngine {
         if (vfxContainer) {
             vfxContainer.innerHTML = '';
         }
+        this.healthBars.forEach(bar => bar.container.remove());
+        this.healthBars.clear();
     }
 }
