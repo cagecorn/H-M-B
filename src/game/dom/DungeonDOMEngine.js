@@ -39,20 +39,6 @@ export class DungeonDOMEngine {
         label.innerText = '[저주받은 숲]';
         tile.appendChild(label);
         grid.appendChild(tile);
-
-        // --- 샘플 배틀 타일 추가 ---
-        const sampleTile = document.createElement('div');
-        sampleTile.className = 'dungeon-tile';
-        sampleTile.style.border = '2px dashed yellow';
-        sampleTile.addEventListener('click', () => {
-            this.scene.scene.start('SampleBattleScene');
-        });
-
-        const sampleLabel = document.createElement('div');
-        sampleLabel.className = 'dungeon-label';
-        sampleLabel.innerText = '[샘플 배틀]';
-        sampleTile.appendChild(sampleLabel);
-        grid.appendChild(sampleTile);
     }
 
     destroy() {
@@ -60,4 +46,3 @@ export class DungeonDOMEngine {
         this.container.style.display = 'none';
     }
 }
-

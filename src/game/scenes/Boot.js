@@ -12,7 +12,6 @@ import { PartyScene } from './PartyScene.js';
 import { DungeonScene } from './DungeonScene.js';
 import { FormationScene } from './FormationScene.js';
 import { CursedForestBattleScene } from './CursedForestBattleScene.js';
-import { SampleBattleScene } from './SampleBattleScene.js';
 
 export class Boot extends Scene
 {
@@ -41,9 +40,7 @@ export class Boot extends Scene
         this.scene.add('DungeonScene', DungeonScene);
         this.scene.add('FormationScene', FormationScene);
         this.scene.add('CursedForestBattle', CursedForestBattleScene);
-        this.scene.add('SampleBattleScene', SampleBattleScene);
 
         this.scene.start('Preloader');
     }
 }
-
