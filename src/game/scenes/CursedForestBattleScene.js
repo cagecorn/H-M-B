@@ -7,6 +7,7 @@ import { monsterEngine } from '../utils/MonsterEngine.js';
 import { getMonsterBase } from '../data/monster.js';
 import { battleEngine } from '../utils/BattleEngine.js';
 import { VfxEngine } from '../utils/VfxEngine.js';
+import { eventBus } from '../utils/EventBus.js';
 
 export class CursedForestBattleScene extends Scene {
     constructor() {
@@ -31,8 +32,8 @@ export class CursedForestBattleScene extends Scene {
         const partyUnits = allMercs.filter(m => partyIds.includes(m.uniqueId));
         this.battleDomEngine.placeAllies(partyUnits);
         partyUnits.forEach(unit => {
-            this.vfxEngine.createHealthBar(unit, 100);
-            this.vfxEngine.updateHealthBar(unit.uniqueId, 100, 100);
+            this.vfxEngine.createHealthBar(unit, unit.maxHp || unit.finalStats.hp);
+            this.vfxEngine.updateHealthBar(unit.uniqueId, unit.currentHp || unit.finalStats.hp, unit.maxHp || unit.finalStats.hp);
         });
 
         const monsters = [];
@@ -42,8 +43,14 @@ export class CursedForestBattleScene extends Scene {
         }
         this.battleDomEngine.placeMonsters(monsters, 8);
         monsters.forEach(mon => {
-            this.vfxEngine.createHealthBar(mon, 80);
-            this.vfxEngine.updateHealthBar(mon.uniqueId, 80, 80);
+            this.vfxEngine.createHealthBar(mon, mon.maxHp || mon.finalStats.hp);
+            this.vfxEngine.updateHealthBar(mon.uniqueId, mon.currentHp || mon.finalStats.hp, mon.maxHp || mon.finalStats.hp);
+        });
+
+        eventBus.on('unit-hp-changed', data => {
+            if (this.vfxEngine) {
+                this.vfxEngine.updateHealthBar(data.unitId, data.currentHp, data.maxHp);
+            }
         });
 
         battleEngine.startBattle(partyUnits, monsters);
@@ -61,6 +68,7 @@ export class CursedForestBattleScene extends Scene {
                 this.vfxEngine.destroy();
                 this.vfxEngine = null;
             }
+            eventBus.off('unit-hp-changed');
             battleEngine.endBattle();
         });
     }
