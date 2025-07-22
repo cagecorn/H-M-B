@@ -11,6 +11,8 @@ export class BattleDOMEngine {
             document.getElementById('app').appendChild(this.container);
         }
         this.grid = null;
+        this.gridCells = [];
+        this.unitSpriteMap = new Map();
 
         // --- 카메라 제어 상태 변수 ---
         this.zoom = 1;
@@ -80,6 +82,23 @@ export class BattleDOMEngine {
         this.container.style.cursor = 'grab';
     }
 
+    createUnitSprite(unit) {
+        const unitDiv = document.createElement('div');
+        unitDiv.className = 'battle-unit';
+        unitDiv.style.backgroundImage = `url(${unit.battleSprite})`;
+        unitDiv.dataset.unitId = unit.uniqueId;
+
+        const name = document.createElement('div');
+        const cls = unit.type === 'ally' ? 'battle-unit-name ally' : 'battle-unit-name enemy';
+        name.className = cls;
+        name.innerText = unit.instanceName || unit.name;
+        unitDiv.appendChild(name);
+
+        this.unitSpriteMap.set(unit.uniqueId, unitDiv);
+        bindingManager.bind(unit.uniqueId, { spriteElement: unitDiv });
+        return unitDiv;
+    }
+
     createStage(bgImage) {
         this.container.style.display = 'block';
         this.container.style.backgroundImage = `url(${bgImage})`;
@@ -112,23 +131,21 @@ export class BattleDOMEngine {
                 grid.appendChild(cell);
             }
         }
+        this.gridCells = Array.from(grid.children);
     }
 
     placeAllies(units) {
         if (!this.grid) return;
         units.forEach(unit => {
+            if (!this.unitSpriteMap.has(unit.uniqueId)) {
+                this.createUnitSprite(unit);
+            }
+            const sprite = this.unitSpriteMap.get(unit.uniqueId);
             const index = formationEngine.getPosition(unit.uniqueId);
-            const cell = this.grid.querySelector(`[data-index='${index}']`);
-            if (!cell) return;
-            const unitDiv = document.createElement('div');
-            unitDiv.className = 'battle-unit';
-            unitDiv.style.backgroundImage = `url(${unit.battleSprite})`;
-            const name = document.createElement('div');
-            name.className = 'battle-unit-name ally';
-            name.innerText = unit.instanceName || unit.name;
-            unitDiv.appendChild(name);
-            cell.appendChild(unitDiv);
-            bindingManager.bind(unit.uniqueId, { spriteElement: unitDiv });
+            const cell = this.gridCells[index];
+            if (cell) {
+                cell.appendChild(sprite);
+            }
         });
     }
 
@@ -136,17 +153,14 @@ export class BattleDOMEngine {
         if (!this.grid) return;
         const available = Array.from(this.grid.children).filter(c => parseInt(c.dataset.col) >= startCol && !c.hasChildNodes());
         monsters.forEach(mon => {
+            if (!this.unitSpriteMap.has(mon.uniqueId)) {
+                this.createUnitSprite(mon);
+            }
+            const sprite = this.unitSpriteMap.get(mon.uniqueId);
             const cell = available.splice(Math.floor(Math.random() * available.length), 1)[0];
-            if (!cell) return;
-            const unitDiv = document.createElement('div');
-            unitDiv.className = 'battle-unit';
-            unitDiv.style.backgroundImage = `url(${mon.battleSprite})`;
-            const name = document.createElement('div');
-            name.className = 'battle-unit-name enemy';
-            name.innerText = mon.instanceName || mon.name;
-            unitDiv.appendChild(name);
-            cell.appendChild(unitDiv);
-            bindingManager.bind(mon.uniqueId, { spriteElement: unitDiv });
+            if (cell) {
+                cell.appendChild(sprite);
+            }
         });
     }
 
@@ -161,5 +175,7 @@ export class BattleDOMEngine {
             this.container.removeEventListener('mouseleave', this._mouseLeaveHandler);
         }
         bindingManager.clear();
+        this.unitSpriteMap.clear();
+        this.gridCells = [];
     }
 }

@@ -4,6 +4,7 @@
  */
 import { turnEngine } from './TurnEngine.js';
 import { delayEngine } from './DelayEngine.js';
+import { eventBus } from './EventBus.js';
 
 class BattleEngine {
     constructor() {
@@ -19,6 +20,15 @@ class BattleEngine {
     startBattle(allies, enemies) {
         this.currentBattle = { allies, enemies };
         turnEngine.init(allies, enemies);
+
+        [...allies, ...enemies].forEach(u => {
+            if (u.finalStats && typeof u.finalStats.hp === 'number') {
+                u.maxHp = u.finalStats.hp;
+                if (u.currentHp === undefined) {
+                    u.currentHp = u.finalStats.hp;
+                }
+            }
+        });
 
         const workerUrl = new URL('../workers/battleWorker.js', import.meta.url);
         this.worker = new Worker(workerUrl, { type: 'module' });
@@ -39,7 +49,14 @@ class BattleEngine {
         if (!target) return;
 
         const damage = await this.calculateDamage(unit, target);
-        target.finalStats.hp = Math.max(0, (target.finalStats.hp || 0) - damage);
+        const newHp = Math.max(0, (target.currentHp ?? target.finalStats.hp) - damage);
+        target.currentHp = newHp;
+        target.finalStats.hp = newHp;
+        eventBus.emit('unit-hp-changed', {
+            unitId: target.uniqueId,
+            currentHp: newHp,
+            maxHp: target.maxHp ?? newHp
+        });
         await delayEngine.hold(300);
         turnEngine.advance();
     }
