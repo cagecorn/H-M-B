@@ -718,3 +718,51 @@ body {
 .battle-unit-name.enemy {
     background-color: rgba(255, 0, 0, 0.6);
 }
+/* --- 유닛 아이들 애니메이션 --- */
+@keyframes idle-float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.battle-unit.is-turn {
+    /* 1.5초 동안 위아래로 부드럽게 움직이는 애니메이션 적용 */
+    animation: idle-float 1.5s ease-in-out infinite;
+}
+
+/* --- 바인딩된 UI 요소 스타일 (예: 이름표) --- */
+.bound-ui-element {
+    position: absolute;
+    width: max-content;
+    padding: 2px 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 2px #000;
+    pointer-events: none;
+    z-index: 1;
+    /* 성능을 위해 will-change 속성 추가 */
+    will-change: transform;
+    transition: transform 0.1s linear; /* 부드러운 위치 동기화를 위함 */
+}
+
+.bound-ui-element.ally {
+    background-color: rgba(0, 0, 255, 0.6);
+    bottom: 2px; /* 유닛 발밑에 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bound-ui-element.enemy {
+    background-color: rgba(255, 0, 0, 0.6);
+    bottom: 2px; /* 유닛 발밑에 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+}
