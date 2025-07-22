@@ -22,13 +22,13 @@ export class BattleDOMEngine {
         grid.id = 'battle-grid';
         this.container.appendChild(grid);
         this.grid = grid;
-        this.grid.style.setProperty('--battle-zoom', this.zoom);
+        this.container.style.setProperty('--battle-zoom', this.zoom);
 
         this._wheelHandler = (e) => {
             e.preventDefault();
             const delta = e.deltaY * -0.001;
             this.zoom = Math.min(2, Math.max(0.5, this.zoom + delta));
-            this.grid.style.setProperty('--battle-zoom', this.zoom);
+            this.container.style.setProperty('--battle-zoom', this.zoom);
         };
         this.grid.addEventListener('wheel', this._wheelHandler, { passive: false });
 

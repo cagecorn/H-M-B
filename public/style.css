@@ -630,6 +630,8 @@ body {
     pointer-events: auto; /* allow wheel events for zoom */
     background-size: cover;
     background-position: center;
+    transform: scale(var(--battle-zoom, 1));
+    transform-origin: center;
     display: none;
 }
 
@@ -637,7 +639,7 @@ body {
     position: absolute;
     top: 5%;
     left: 50%;
-    transform: translate(-50%, 0) scale(var(--battle-zoom, 1));
+    transform: translate(-50%, 0);
     transform-origin: center;
     width: 90%;
     height: 90%;
