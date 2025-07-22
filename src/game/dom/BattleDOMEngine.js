@@ -136,15 +136,28 @@ export class BattleDOMEngine {
 
     placeAllies(units) {
         if (!this.grid) return;
+
+        const available = this.gridCells.filter(c => !c.hasChildNodes() && parseInt(c.dataset.col) < 8);
+
         units.forEach(unit => {
             if (!this.unitSpriteMap.has(unit.uniqueId)) {
                 this.createUnitSprite(unit);
             }
+
             const sprite = this.unitSpriteMap.get(unit.uniqueId);
-            const index = formationEngine.getPosition(unit.uniqueId);
-            const cell = this.gridCells[index];
+            let index = formationEngine.getPosition(unit.uniqueId);
+            let cell = this.gridCells[index];
+
+            if (!cell || cell.hasChildNodes() || parseInt(cell.dataset.col) >= 8) {
+                cell = available.shift();
+                if (cell) {
+                    formationEngine.setPosition(unit.uniqueId, parseInt(cell.dataset.index));
+                }
+            }
+
             if (cell) {
                 cell.appendChild(sprite);
+                sprite.dataset.cellIndex = cell.dataset.index;
             }
         });
     }

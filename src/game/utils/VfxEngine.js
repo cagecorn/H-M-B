@@ -73,10 +73,16 @@ export class VfxEngine {
 
         const healthBarContainer = document.createElement('div');
         healthBarContainer.className = 'health-bar-container';
+        healthBarContainer.style.position = 'absolute';
+        healthBarContainer.style.left = '0';
+        healthBarContainer.style.top = '0';
 
         const fill = document.createElement('div');
         fill.className = 'health-bar-fill';
         fill.style.width = '100%';
+        fill.style.position = 'absolute';
+        fill.style.left = '0';
+        fill.style.top = '0';
 
         healthBarContainer.appendChild(fill);
         this.uiContainer.appendChild(healthBarContainer);
