@@ -631,14 +631,18 @@ body {
     background-size: cover;
     background-position: center;
     display: none;
+
+    /* 확대/축소 기준을 컨테이너로 이동 */
+    --battle-zoom: 1;
+    transform-origin: center;
+    transform: scale(var(--battle-zoom));
 }
 
 #battle-grid {
     position: absolute;
     top: 5%;
     left: 50%;
-    transform: translate(-50%, 0) scale(var(--battle-zoom, 1));
-    transform-origin: center;
+    transform: translate(-50%, 0);
     width: 90%;
     height: 90%;
     display: grid;
