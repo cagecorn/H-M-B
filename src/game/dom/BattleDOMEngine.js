@@ -1,6 +1,4 @@
 import { formationEngine } from '../utils/FormationEngine.js';
-// --- (수정) 바인딩 매니저 import ---
-import { bindingManager } from '../utils/BindingManager.js';
 
 export class BattleDOMEngine {
     constructor(scene) {
@@ -123,14 +121,12 @@ export class BattleDOMEngine {
             if (!cell) return;
             const unitDiv = document.createElement('div');
             unitDiv.className = 'battle-unit';
-            // --- (수정) 유닛 식별을 위한 데이터 속성 추가 ---
-            unitDiv.dataset.unitId = unit.uniqueId;
             unitDiv.style.backgroundImage = `url(${unit.battleSprite})`;
-
+            const name = document.createElement('div');
+            name.className = 'battle-unit-name ally';
+            name.innerText = unit.instanceName || unit.name;
+            unitDiv.appendChild(name);
             cell.appendChild(unitDiv);
-
-            // --- (수정) 바인딩 매니저에 유닛 등록 ---
-            bindingManager.bindUnit(unit, unitDiv);
         });
     }
 
@@ -142,14 +138,12 @@ export class BattleDOMEngine {
             if (!cell) return;
             const unitDiv = document.createElement('div');
             unitDiv.className = 'battle-unit';
-            // --- (수정) 유닛 식별을 위한 데이터 속성 추가 ---
-            unitDiv.dataset.unitId = mon.uniqueId;
             unitDiv.style.backgroundImage = `url(${mon.battleSprite})`;
-
+            const name = document.createElement('div');
+            name.className = 'battle-unit-name enemy';
+            name.innerText = mon.instanceName || mon.name;
+            unitDiv.appendChild(name);
             cell.appendChild(unitDiv);
-
-            // --- (수정) 바인딩 매니저에 유닛 등록 ---
-            bindingManager.bindUnit(mon, unitDiv);
         });
     }
 
@@ -163,7 +157,5 @@ export class BattleDOMEngine {
             this.container.removeEventListener('mouseup', this._mouseUpHandler);
             this.container.removeEventListener('mouseleave', this._mouseLeaveHandler);
         }
-        // --- (수정) 씬 종료 시 바인딩 매니저 클리어 ---
-        bindingManager.clear();
     }
 }
