@@ -22,15 +22,16 @@ export class BattleDOMEngine {
         grid.id = 'battle-grid';
         this.container.appendChild(grid);
         this.grid = grid;
-        this.grid.style.setProperty('--battle-zoom', this.zoom);
+        // 확대/축소 변수는 컨테이너에서 관리한다
+        this.container.style.setProperty('--battle-zoom', this.zoom);
 
         this._wheelHandler = (e) => {
             e.preventDefault();
             const delta = e.deltaY * -0.001;
             this.zoom = Math.min(2, Math.max(0.5, this.zoom + delta));
-            this.grid.style.setProperty('--battle-zoom', this.zoom);
+            this.container.style.setProperty('--battle-zoom', this.zoom);
         };
-        this.grid.addEventListener('wheel', this._wheelHandler, { passive: false });
+        this.container.addEventListener('wheel', this._wheelHandler, { passive: false });
 
         const cols = 16;
         const rows = 9;
@@ -84,8 +85,8 @@ export class BattleDOMEngine {
     destroy() {
         this.container.innerHTML = '';
         this.container.style.display = 'none';
-        if (this.grid && this._wheelHandler) {
-            this.grid.removeEventListener('wheel', this._wheelHandler);
+        if (this.container && this._wheelHandler) {
+            this.container.removeEventListener('wheel', this._wheelHandler);
         }
     }
 }
