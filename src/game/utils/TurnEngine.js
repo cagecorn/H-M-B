@@ -1,3 +1,5 @@
+import { debugSpriteCoordinateManager } from '../debug/DebugSpriteCoordinateManager.js';
+
 class TurnEngine {
     constructor() {
         this.turnQueue = [];
@@ -14,7 +16,11 @@ class TurnEngine {
     }
 
     getCurrentUnit() {
-        return this.turnQueue[this.currentIndex];
+        const unit = this.turnQueue[this.currentIndex];
+        if (unit) {
+            debugSpriteCoordinateManager.logSpriteCoordinates(unit, 'Turn Start');
+        }
+        return unit;
     }
 
     advance() {
