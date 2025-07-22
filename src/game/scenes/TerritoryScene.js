@@ -4,10 +4,14 @@ import { DOMEngine } from '../utils/DOMEngine.js';
 import { TerritoryDOMEngine } from '../dom/TerritoryDOMEngine.js';
 // 새로 만든 해상도 로그 매니저를 import 합니다.
 import { debugResolutionLogManager } from '../debug/DebugResolutionLogManager.js';
+// --- (신규) VfxEngine import 추가 ---
+import { VfxEngine } from '../utils/VfxEngine.js';
 
 export class TerritoryScene extends Scene {
     constructor() {
         super('TerritoryScene');
+        // --- (신규) vfxEngine 속성 추가 ---
+        this.vfxEngine = null;
     }
 
     create() {
@@ -26,6 +30,9 @@ export class TerritoryScene extends Scene {
         const domEngine = new DOMEngine(this);
         const territoryDomEngine = new TerritoryDOMEngine(this, domEngine);
 
+        // --- (신규) VFX 엔진 초기화 ---
+        this.vfxEngine = new VfxEngine();
+
         // --- 중요: 해상도 정보 로그 출력 ---
         // 게임이 시작될 때 현재 해상도 정보를 콘솔에 기록합니다.
         debugResolutionLogManager.logResolution(this.sys.game);
@@ -34,6 +41,19 @@ export class TerritoryScene extends Scene {
         this.events.on('shutdown', () => {
             // DOM을 정리하여 다음에 씬을 다시 생성할 때 중복이 발생하지 않도록 합니다.
             territoryDomEngine.destroy();
+            // --- (신규) 씬이 종료될 때 VFX 엔진도 정리 ---
+            if (this.vfxEngine) {
+                this.vfxEngine.destroy();
+                this.vfxEngine = null;
+            }
         });
+    }
+
+    // --- (신규) update 루프 추가 ---
+    update() {
+        // 매 프레임마다 비 효과를 생성합니다.
+        if (this.vfxEngine) {
+            this.vfxEngine.createRainEffect();
+        }
     }
 }
